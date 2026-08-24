@@ -1,0 +1,212 @@
+[
+  {
+    "id": "unit-01",
+    "level": 1,
+    "order": 1,
+    "title": "Nice to Meet You",
+    "titleKo": "자기소개",
+    "topic": "처음 만난 사람에게 나를 소개하고, 상대에 대해 묻기",
+    "expressions": [
+      { "id": "u1e1", "en": "I'm from Korea.", "ko": "저는 한국에서 왔어요.", "example": "Hi, I'm Sewon. I'm from Korea.", "exampleKo": "안녕하세요, 세원이에요. 한국에서 왔어요." },
+      { "id": "u1e2", "en": "I work as a designer.", "ko": "저는 디자이너로 일해요.", "example": "I work as a designer at a small company.", "exampleKo": "작은 회사에서 디자이너로 일하고 있어요." },
+      { "id": "u1e3", "en": "In my free time, I like watching movies.", "ko": "여가 시간에는 영화 보는 걸 좋아해요.", "example": "In my free time, I like watching movies with my friends.", "exampleKo": "여가 시간에는 친구들과 영화 보는 걸 좋아해요." },
+      { "id": "u1e4", "en": "How about you?", "ko": "당신은요?", "example": "I love spicy food. How about you?", "exampleKo": "저는 매운 음식을 좋아해요. 당신은요?" },
+      { "id": "u1e5", "en": "It was nice talking to you.", "ko": "얘기 나눠서 즐거웠어요.", "example": "It was nice talking to you. Let's chat again soon!", "exampleKo": "얘기 나눠서 즐거웠어요. 곧 또 얘기해요!" }
+    ],
+    "situation": {
+      "setting": "어학연수 첫날, 옆자리 친구와 처음 인사하는 상황",
+      "tutorRole": "같은 반이 된 외국인 친구",
+      "learnerRole": "첫 등교한 유학생",
+      "goalKo": "배운 표현으로 출신·직업·취미를 소개하고 상대에게 되묻기"
+    }
+  },
+  {
+    "id": "unit-02",
+    "level": 1,
+    "order": 2,
+    "title": "Ordering Food & Drinks",
+    "titleKo": "주문하기",
+    "topic": "카페나 식당에서 원하는 것을 주문하고 요청하기",
+    "expressions": [
+      { "id": "u2e1", "en": "Can I get an iced americano?", "ko": "아이스 아메리카노 하나 주시겠어요?", "example": "Hi, can I get an iced americano, please?", "exampleKo": "안녕하세요, 아이스 아메리카노 하나 주시겠어요?" },
+      { "id": "u2e2", "en": "For here or to go? — To go, please.", "ko": "매장에서 드세요, 포장이세요? — 포장이요.", "example": "To go, please. I'm in a bit of a hurry.", "exampleKo": "포장이요. 제가 좀 급해서요." },
+      { "id": "u2e3", "en": "Could you make it less sweet?", "ko": "덜 달게 해주실 수 있나요?", "example": "Could you make it less sweet? I don't like sugary drinks.", "exampleKo": "덜 달게 해주실 수 있나요? 단 음료를 안 좋아해서요." },
+      { "id": "u2e4", "en": "What do you recommend?", "ko": "추천해 주실 만한 게 있나요?", "example": "It's my first time here. What do you recommend?", "exampleKo": "여기 처음 왔어요. 추천해 주실 만한 게 있나요?" },
+      { "id": "u2e5", "en": "Can I pay by card?", "ko": "카드로 계산할 수 있나요?", "example": "Can I pay by card? I don't have any cash.", "exampleKo": "카드로 계산할 수 있나요? 현금이 없어서요." }
+    ],
+    "situation": {
+      "setting": "여행 중 들른 현지 카페에서 주문하는 상황",
+      "tutorRole": "카페 바리스타",
+      "learnerRole": "처음 온 손님",
+      "goalKo": "추천을 받고, 옵션을 요청하며 주문을 완료하기"
+    }
+  },
+  {
+    "id": "unit-03",
+    "level": 1,
+    "order": 3,
+    "title": "Asking for Directions",
+    "titleKo": "길 묻기",
+    "topic": "길을 묻고, 안내를 이해하고, 되물어보기",
+    "expressions": [
+      { "id": "u3e1", "en": "Excuse me, how do I get to the station?", "ko": "실례합니다, 역까지 어떻게 가나요?", "example": "Excuse me, how do I get to the subway station?", "exampleKo": "실례합니다, 지하철역까지 어떻게 가나요?" },
+      { "id": "u3e2", "en": "Is it far from here?", "ko": "여기서 먼가요?", "example": "Is it far from here? Can I walk there?", "exampleKo": "여기서 먼가요? 걸어갈 수 있나요?" },
+      { "id": "u3e3", "en": "Go straight and turn left.", "ko": "직진하다가 왼쪽으로 도세요.", "example": "Go straight for two blocks and turn left at the bank.", "exampleKo": "두 블록 직진하다가 은행에서 왼쪽으로 도세요." },
+      { "id": "u3e4", "en": "Could you say that again, please?", "ko": "다시 한번 말씀해 주시겠어요?", "example": "Sorry, could you say that again, please? A bit slower.", "exampleKo": "죄송한데 다시 한번 말씀해 주시겠어요? 조금만 천천히요." },
+      { "id": "u3e5", "en": "Thank you so much for your help.", "ko": "도와주셔서 정말 감사합니다.", "example": "Got it! Thank you so much for your help.", "exampleKo": "알겠어요! 도와주셔서 정말 감사합니다." }
+    ],
+    "situation": {
+      "setting": "낯선 도시에서 유명한 미술관을 찾아가는 상황",
+      "tutorRole": "길을 알려주는 친절한 현지인",
+      "learnerRole": "길을 잃은 여행객",
+      "goalKo": "길을 묻고, 못 알아들으면 되묻고, 감사 인사로 마무리하기"
+    }
+  },
+  {
+    "id": "unit-04",
+    "level": 1,
+    "order": 4,
+    "title": "Making Plans",
+    "titleKo": "약속 잡기",
+    "topic": "친구와 시간과 장소를 정해 약속 잡기",
+    "expressions": [
+      { "id": "u4e1", "en": "Are you free this weekend?", "ko": "이번 주말에 시간 있어?", "example": "Hey, are you free this weekend? Let's hang out.", "exampleKo": "야, 이번 주말에 시간 있어? 같이 놀자." },
+      { "id": "u4e2", "en": "How about Saturday afternoon?", "ko": "토요일 오후는 어때?", "example": "How about Saturday afternoon? Around 2?", "exampleKo": "토요일 오후는 어때? 2시쯤?" },
+      { "id": "u4e3", "en": "That works for me.", "ko": "나는 좋아. (그 시간 괜찮아)", "example": "Saturday at 2? That works for me.", "exampleKo": "토요일 2시? 나는 좋아." },
+      { "id": "u4e4", "en": "Where should we meet?", "ko": "어디서 만날까?", "example": "Where should we meet? How about the mall entrance?", "exampleKo": "어디서 만날까? 쇼핑몰 입구 어때?" },
+      { "id": "u4e5", "en": "Sorry, I can't make it.", "ko": "미안, 나 못 갈 것 같아.", "example": "Sorry, I can't make it on Sunday. Can we do Monday?", "exampleKo": "미안, 일요일엔 못 갈 것 같아. 월요일로 할 수 있을까?" }
+    ],
+    "situation": {
+      "setting": "외국인 친구와 주말 영화 약속을 잡는 상황",
+      "tutorRole": "같이 놀고 싶어 하는 친구",
+      "learnerRole": "약속을 잡는 사람",
+      "goalKo": "시간을 제안하고, 조율하고, 장소까지 확정하기"
+    }
+  },
+  {
+    "id": "unit-05",
+    "level": 1,
+    "order": 5,
+    "title": "How Are You Feeling?",
+    "titleKo": "감정 표현",
+    "topic": "기분과 감정을 표현하고 이유 말하기",
+    "expressions": [
+      { "id": "u5e1", "en": "I'm so excited about the trip.", "ko": "여행 때문에 너무 설레.", "example": "I'm so excited about the trip next week!", "exampleKo": "다음 주 여행 때문에 너무 설레!" },
+      { "id": "u5e2", "en": "I'm a little nervous.", "ko": "조금 긴장돼.", "example": "I have a test tomorrow, so I'm a little nervous.", "exampleKo": "내일 시험이 있어서 조금 긴장돼." },
+      { "id": "u5e3", "en": "That's a relief.", "ko": "다행이다.", "example": "The test is canceled? That's a relief!", "exampleKo": "시험이 취소됐다고? 다행이다!" },
+      { "id": "u5e4", "en": "I'm exhausted today.", "ko": "오늘 완전 지쳤어.", "example": "I worked overtime, so I'm exhausted today.", "exampleKo": "야근해서 오늘 완전 지쳤어." },
+      { "id": "u5e5", "en": "It made my day.", "ko": "덕분에 기분이 최고야.", "example": "Your message really made my day.", "exampleKo": "네 메시지 덕분에 기분이 최고야." }
+    ],
+    "situation": {
+      "setting": "오랜만에 만난 친구와 서로의 최근 기분을 나누는 상황",
+      "tutorRole": "근황을 궁금해하는 친구",
+      "learnerRole": "요즘 있었던 일을 이야기하는 사람",
+      "goalKo": "감정 표현 3가지 이상을 써서 요즘 기분을 이야기하기"
+    }
+  },
+  {
+    "id": "unit-06",
+    "level": 1,
+    "order": 6,
+    "title": "Talking About the Past",
+    "titleKo": "과거 이야기",
+    "topic": "지난 일을 과거형으로 이야기하기",
+    "expressions": [
+      { "id": "u6e1", "en": "I went to Busan last weekend.", "ko": "지난 주말에 부산에 갔어.", "example": "I went to Busan last weekend with my family.", "exampleKo": "지난 주말에 가족들이랑 부산에 갔어." },
+      { "id": "u6e2", "en": "It was amazing.", "ko": "정말 최고였어.", "example": "The beach at night? It was amazing.", "exampleKo": "밤 바다? 정말 최고였어." },
+      { "id": "u6e3", "en": "I've never tried it before.", "ko": "한 번도 안 해봤어.", "example": "Surfing? I've never tried it before.", "exampleKo": "서핑? 한 번도 안 해봤어." },
+      { "id": "u6e4", "en": "The best part was the food.", "ko": "제일 좋았던 건 음식이었어.", "example": "The best part was the food. We ate so much seafood.", "exampleKo": "제일 좋았던 건 음식이었어. 해산물을 엄청 먹었거든." },
+      { "id": "u6e5", "en": "I wish I could go back.", "ko": "다시 갈 수 있으면 좋겠어.", "example": "It was so fun. I wish I could go back.", "exampleKo": "너무 재밌었어. 다시 갈 수 있으면 좋겠어." }
+    ],
+    "situation": {
+      "setting": "휴가에서 돌아온 뒤 친구에게 여행담을 들려주는 상황",
+      "tutorRole": "여행 이야기를 듣고 싶어 하는 친구",
+      "learnerRole": "여행에서 막 돌아온 사람",
+      "goalKo": "과거형으로 여행 경험을 3문장 이상 이야기하기"
+    }
+  },
+  {
+    "id": "unit-07",
+    "level": 1,
+    "order": 7,
+    "title": "Talking About Plans",
+    "titleKo": "계획 말하기",
+    "topic": "앞으로의 계획과 의지를 표현하기",
+    "expressions": [
+      { "id": "u7e1", "en": "I'm going to start exercising.", "ko": "운동을 시작할 거야.", "example": "I'm going to start exercising next month.", "exampleKo": "다음 달부터 운동을 시작할 거야." },
+      { "id": "u7e2", "en": "I'm thinking of learning guitar.", "ko": "기타를 배워볼까 생각 중이야.", "example": "I'm thinking of learning guitar this year.", "exampleKo": "올해 기타를 배워볼까 생각 중이야." },
+      { "id": "u7e3", "en": "I'd rather stay home tonight.", "ko": "오늘 밤은 그냥 집에 있고 싶어.", "example": "I'm tired, so I'd rather stay home tonight.", "exampleKo": "피곤해서 오늘 밤은 그냥 집에 있고 싶어." },
+      { "id": "u7e4", "en": "It depends on the weather.", "ko": "날씨에 달렸어.", "example": "Camping this weekend? It depends on the weather.", "exampleKo": "이번 주말 캠핑? 날씨에 달렸어." },
+      { "id": "u7e5", "en": "I'm looking forward to it.", "ko": "정말 기대돼.", "example": "The concert is next week. I'm looking forward to it!", "exampleKo": "콘서트가 다음 주야. 정말 기대돼!" }
+    ],
+    "situation": {
+      "setting": "새해를 앞두고 친구와 내년 계획을 이야기하는 상황",
+      "tutorRole": "계획을 묻는 친구",
+      "learnerRole": "새해 계획을 세우는 사람",
+      "goalKo": "미래 표현으로 계획 2가지 이상을 말하고 기대감 표현하기"
+    }
+  },
+  {
+    "id": "unit-08",
+    "level": 1,
+    "order": 8,
+    "title": "Asking for Help",
+    "titleKo": "부탁하기",
+    "topic": "정중하게 부탁하고, 부탁을 수락·거절하기",
+    "expressions": [
+      { "id": "u8e1", "en": "Could you do me a favor?", "ko": "부탁 하나 해도 될까?", "example": "Hey, could you do me a favor?", "exampleKo": "저기, 부탁 하나 해도 될까?" },
+      { "id": "u8e2", "en": "Would you mind helping me with this?", "ko": "이것 좀 도와줄 수 있어?", "example": "Would you mind helping me with this box? It's heavy.", "exampleKo": "이 상자 옮기는 것 좀 도와줄 수 있어? 무거워서." },
+      { "id": "u8e3", "en": "Of course, no problem.", "ko": "당연하지, 문제없어.", "example": "Of course, no problem. What do you need?", "exampleKo": "당연하지, 문제없어. 뭐가 필요해?" },
+      { "id": "u8e4", "en": "I'm afraid I can't right now.", "ko": "미안하지만 지금은 어려울 것 같아.", "example": "I'm afraid I can't right now. Maybe after lunch?", "exampleKo": "미안하지만 지금은 어려울 것 같아. 점심 이후엔 어때?" },
+      { "id": "u8e5", "en": "I owe you one.", "ko": "신세 졌네. (내가 하나 빚졌어)", "example": "Thanks for covering my shift. I owe you one!", "exampleKo": "근무 대신해줘서 고마워. 신세 졌네!" }
+    ],
+    "situation": {
+      "setting": "이사하는 날 친구에게 도움을 요청하는 상황",
+      "tutorRole": "도와줄지 고민하는 친구",
+      "learnerRole": "이사를 앞두고 부탁하는 사람",
+      "goalKo": "정중한 부탁 표현으로 도움을 요청하고 고마움 표현하기"
+    }
+  },
+  {
+    "id": "unit-09",
+    "level": 1,
+    "order": 9,
+    "title": "Sharing Opinions",
+    "titleKo": "의견 말하기",
+    "topic": "내 의견을 말하고, 동의하거나 반대하기",
+    "expressions": [
+      { "id": "u9e1", "en": "In my opinion, it's worth it.", "ko": "내 생각엔 그럴 만한 가치가 있어.", "example": "In my opinion, the new phone is worth it.", "exampleKo": "내 생각엔 그 새 폰은 살 만한 가치가 있어." },
+      { "id": "u9e2", "en": "I totally agree with you.", "ko": "네 말에 완전 동의해.", "example": "I totally agree with you. The movie was great.", "exampleKo": "네 말에 완전 동의해. 그 영화 정말 좋았어." },
+      { "id": "u9e3", "en": "I see your point, but I think differently.", "ko": "무슨 말인지 알겠는데, 난 생각이 좀 달라.", "example": "I see your point, but I think differently about this.", "exampleKo": "무슨 말인지 알겠는데, 이건 난 생각이 좀 달라." },
+      { "id": "u9e4", "en": "It depends on the person.", "ko": "사람마다 다른 것 같아.", "example": "Is it too expensive? It depends on the person.", "exampleKo": "너무 비싸냐고? 사람마다 다른 것 같아." },
+      { "id": "u9e5", "en": "What do you think about it?", "ko": "너는 어떻게 생각해?", "example": "I like the idea. What do you think about it?", "exampleKo": "난 그 아이디어 좋은데, 너는 어떻게 생각해?" }
+    ],
+    "situation": {
+      "setting": "친구와 '재택근무 vs 사무실 출근' 을 두고 가볍게 토론하는 상황",
+      "tutorRole": "반대 의견을 가진 친구",
+      "learnerRole": "자기 의견을 말하는 사람",
+      "goalKo": "의견 표현으로 내 입장을 말하고, 동의/반대 표현을 한 번씩 쓰기"
+    }
+  },
+  {
+    "id": "unit-10",
+    "level": 1,
+    "order": 10,
+    "title": "On the Phone",
+    "titleKo": "전화 표현",
+    "topic": "전화를 걸고, 받고, 메시지를 남기기",
+    "expressions": [
+      { "id": "u10e1", "en": "May I speak to Mr. Kim?", "ko": "김 선생님과 통화할 수 있을까요?", "example": "Hello, may I speak to Mr. Kim, please?", "exampleKo": "여보세요, 김 선생님과 통화할 수 있을까요?" },
+      { "id": "u10e2", "en": "Who's calling, please?", "ko": "실례지만 누구세요?", "example": "May I ask who's calling, please?", "exampleKo": "실례지만 전화 주신 분이 누구신가요?" },
+      { "id": "u10e3", "en": "Can I leave a message?", "ko": "메시지를 남길 수 있을까요?", "example": "He's not in? Then can I leave a message?", "exampleKo": "안 계세요? 그럼 메시지를 남길 수 있을까요?" },
+      { "id": "u10e4", "en": "Sorry, you're breaking up.", "ko": "죄송한데 소리가 자꾸 끊겨요.", "example": "Sorry, you're breaking up. Can you hear me now?", "exampleKo": "죄송한데 소리가 자꾸 끊겨요. 지금은 들리세요?" },
+      { "id": "u10e5", "en": "I'll call you back in ten minutes.", "ko": "10분 뒤에 다시 전화할게요.", "example": "I'm in a meeting. I'll call you back in ten minutes.", "exampleKo": "지금 회의 중이라, 10분 뒤에 다시 전화할게요." }
+    ],
+    "situation": {
+      "setting": "해외 회사에 전화를 걸어 담당자를 찾는 상황",
+      "tutorRole": "전화를 받은 회사 직원",
+      "learnerRole": "담당자와 통화하려는 사람",
+      "goalKo": "전화 표현으로 담당자를 찾고, 부재 시 메시지 남기기"
+    }
+  }
+]

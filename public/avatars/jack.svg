@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="35%">
+      <stop offset="0%" stop-color="#fef3c7"/>
+      <stop offset="100%" stop-color="#fbbf24"/>
+    </radialGradient>
+  </defs>
+  <circle cx="100" cy="100" r="100" fill="url(#bg)"/>
+  <!-- neck & apron -->
+  <rect x="88" y="128" width="24" height="24" rx="8" fill="#eec09a"/>
+  <path d="M38 200 Q44 156 76 150 L100 160 L124 150 Q156 156 162 200 Z" fill="#374151"/>
+  <path d="M84 158 L116 158 L112 200 L88 200 Z" fill="#f9fafb"/>
+  <line x1="100" y1="158" x2="100" y2="150" stroke="#f9fafb" stroke-width="4"/>
+  <!-- face -->
+  <ellipse cx="100" cy="98" rx="38" ry="41" fill="#f2c79d"/>
+  <!-- messy blond hair -->
+  <path d="M60 88 Q56 50 100 44 Q144 50 140 88 Q138 70 128 64 L120 70 L112 60 L100 68 L88 58 L80 68 L72 62 Q62 70 60 88 Z" fill="#d9a441"/>
+  <!-- ears -->
+  <ellipse cx="62" cy="102" rx="5" ry="8" fill="#f2c79d"/>
+  <ellipse cx="138" cy="102" rx="5" ry="8" fill="#f2c79d"/>
+  <!-- big happy eyes (closed-smile style) -->
+  <path d="M78 96 Q85 90 92 96" stroke="#26170f" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M108 96 Q115 90 122 96" stroke="#26170f" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- brows -->
+  <path d="M76 85 Q85 81 94 85" stroke="#b3812f" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M106 85 Q115 81 124 85" stroke="#b3812f" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- freckles -->
+  <circle cx="76" cy="108" r="1.3" fill="#c98b52"/>
+  <circle cx="82" cy="112" r="1.3" fill="#c98b52"/>
+  <circle cx="124" cy="108" r="1.3" fill="#c98b52"/>
+  <circle cx="118" cy="112" r="1.3" fill="#c98b52"/>
+  <!-- nose & big grin -->
+  <path d="M99 103 Q101 108 99 111" stroke="#cf9a63" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M84 116 Q100 132 116 116 Q108 124 100 124 Q92 124 84 116 Z" fill="#8f3f2c"/>
+  <path d="M90 119 Q100 126 110 119 L108 121 Q100 127 92 121 Z" fill="#fff"/>
+</svg>

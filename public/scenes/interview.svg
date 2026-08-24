@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1000" preserveAspectRatio="xMidYMid slice">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f2937"/><stop offset="1" stop-color="#030712"/></linearGradient></defs>
+  <rect width="1200" height="1000" fill="url(#g)"/>
+      <rect x="0" y="640" width="1200" height="360" fill="#111827"/>
+      <g fill="#374151"><rect x="200" y="480" width="800" height="160" rx="10"/></g>
+      <rect x="180" y="464" width="840" height="24" rx="6" fill="#9ca3af"/>
+      <g fill="#60a5fa" opacity="0.25"><rect x="120" y="100" width="960" height="320" rx="8"/></g>
+      <g stroke="#e5e7eb" stroke-width="2" opacity="0.25"><line x1="120" y1="260" x2="1080" y2="260"/><line x1="440" y1="100" x2="440" y2="420"/><line x1="760" y1="100" x2="760" y2="420"/></g>
+      <g><rect x="560" y="420" width="80" height="50" rx="6" fill="#e5e7eb"/><rect x="800" y="430" width="120" height="40" rx="6" fill="#f59e0b" opacity="0.8"/></g>
+      <text x="600" y="330" text-anchor="middle" font-family="Arial" font-size="40" fill="#e5e7eb" opacity="0.9">Interview Room 3</text>
+</svg>

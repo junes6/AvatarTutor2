@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1000" preserveAspectRatio="xMidYMid slice">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a1620"/><stop offset="1" stop-color="#160609"/></linearGradient></defs>
+  <rect width="1200" height="1000" fill="url(#g)"/>
+      <rect x="0" y="640" width="1200" height="360" fill="#2b0e13"/>
+      <g fill="#f8e8d0"><ellipse cx="600" cy="660" rx="360" ry="60"/></g>
+      <g fill="#b91c1c"><rect x="240" y="600" width="720" height="70" rx="10"/></g>
+      <g><circle cx="600" cy="600" r="60" fill="#fff7ed"/><circle cx="600" cy="600" r="42" fill="#d97706"/><circle cx="470" cy="590" r="18" fill="#fde68a"/><rect x="700" y="560" width="10" height="80" rx="4" fill="#e5e7eb"/></g>
+      <g fill="#fbbf24" opacity="0.85"><circle cx="380" cy="150" r="16"/><circle cx="600" cy="120" r="18"/><circle cx="820" cy="150" r="16"/></g>
+      <g stroke="#fbbf24" stroke-width="3" opacity="0.4"><line x1="380" y1="0" x2="380" y2="134"/><line x1="600" y1="0" x2="600" y2="102"/><line x1="820" y1="0" x2="820" y2="134"/></g>
+      <text x="600" y="300" text-anchor="middle" font-family="Georgia, serif" font-size="44" fill="#fde2c8" opacity="0.9">Trattoria Nonna</text>
+</svg>

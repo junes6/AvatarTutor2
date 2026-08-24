@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1000" preserveAspectRatio="xMidYMid slice">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f2b4a"/><stop offset="1" stop-color="#050b14"/></linearGradient></defs>
+  <rect width="1200" height="1000" fill="url(#g)"/>
+      <rect x="0" y="640" width="1200" height="360" fill="#0b1a2b"/>
+      <g fill="#1e3a5f" opacity="0.8"><rect x="100" y="420" width="1000" height="220" rx="10"/></g>
+      <g fill="#cbd5e1" opacity="0.25"><rect x="140" y="120" width="920" height="260" rx="6"/></g>
+      <g stroke="#94a3b8" stroke-width="3" opacity="0.3"><line x1="140" y1="250" x2="1060" y2="250"/><line x1="600" y1="120" x2="600" y2="380"/></g>
+      <g fill="#facc15"><rect x="520" y="440" width="160" height="60" rx="8"/></g>
+      <text x="600" y="480" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="28" fill="#0b1a2b">IMMIGRATION</text>
+      <g fill="#93c5fd" opacity="0.5"><path d="M820 180 l140 -40 l-20 50 l60 20 l-200 30 z"/></g>
+</svg>

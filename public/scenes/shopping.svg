@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1000" preserveAspectRatio="xMidYMid slice">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b2a4d"/><stop offset="1" stop-color="#1e1430"/></linearGradient></defs>
+  <rect width="1200" height="1000" fill="url(#g)"/>
+  <rect x="0" y="660" width="1200" height="340" fill="#2a1d3d"/>
+  <rect x="0" y="644" width="1200" height="20" fill="#57406e"/>
+  <!-- 스포트라이트 -->
+  <g fill="#f5d49b" opacity="0.75"><circle cx="240" cy="120" r="20"/><circle cx="600" cy="100" r="24"/><circle cx="960" cy="120" r="20"/></g>
+  <g fill="#f5d49b" opacity="0.08">
+    <path d="M240 140 L160 660 L320 660 Z"/><path d="M600 124 L500 660 L700 660 Z"/><path d="M960 140 L880 660 L1040 660 Z"/>
+  </g>
+  <!-- 옷걸이 랙 -->
+  <g>
+    <rect x="110" y="300" width="14" height="360" fill="#8b7355"/>
+    <rect x="470" y="300" width="14" height="360" fill="#8b7355"/>
+    <rect x="100" y="290" width="394" height="14" rx="7" fill="#8b7355"/>
+    <!-- 옷들 -->
+    <path d="M150 320 L200 320 L206 470 L144 470 Z" fill="#e11d48"/>
+    <path d="M220 320 L270 320 L276 460 L214 460 Z" fill="#2563eb"/>
+    <path d="M290 320 L340 320 L346 480 L284 480 Z" fill="#16a34a"/>
+    <path d="M360 320 L410 320 L416 455 L354 455 Z" fill="#f59e0b"/>
+  </g>
+  <!-- 선반 -->
+  <g>
+    <rect x="760" y="280" width="340" height="16" rx="6" fill="#8b7355"/>
+    <rect x="760" y="420" width="340" height="16" rx="6" fill="#8b7355"/>
+    <g fill="#cbd5e1"><rect x="790" y="220" width="70" height="54" rx="6"/><rect x="890" y="220" width="70" height="54" rx="6" fill="#f9a8d4"/><rect x="990" y="220" width="70" height="54" rx="6" fill="#93c5fd"/></g>
+    <g><rect x="790" y="360" width="70" height="54" rx="6" fill="#fcd34d"/><rect x="890" y="360" width="70" height="54" rx="6" fill="#86efac"/><rect x="990" y="360" width="70" height="54" rx="6" fill="#cbd5e1"/></g>
+  </g>
+  <!-- 마네킹 -->
+  <g transform="translate(620 430)">
+    <circle cx="0" cy="0" r="26" fill="#d6c7b0"/>
+    <path d="M-34 40 Q0 20 34 40 L28 210 L-28 210 Z" fill="#7c3aed"/>
+  </g>
+  <!-- 계산대 -->
+  <rect x="80" y="700" width="320" height="130" rx="10" fill="#57406e"/>
+  <rect x="120" y="660" width="80" height="50" rx="6" fill="#1f2937"/>
+  <text x="600" y="70" text-anchor="middle" font-family="Georgia, serif" font-size="44" fill="#e9d5ff" opacity="0.85">The Fitting Room</text>
+</svg>

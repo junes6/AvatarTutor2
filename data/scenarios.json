@@ -1,0 +1,79 @@
+[
+  {
+    "id": "cafe",
+    "title": "Cafe",
+    "titleKo": "카페",
+    "image": "/scenes/cafe.svg",
+    "ambience": "/scenes/cafe-ambience.wav",
+    "tutorRole": "카페 바리스타",
+    "learnerRole": "주문하러 온 손님",
+    "descriptionKo": "아늑한 카페에서 음료를 주문하고 가벼운 대화를 나눠보세요."
+  },
+  {
+    "id": "airport",
+    "title": "Airport",
+    "titleKo": "공항",
+    "image": "/scenes/airport.svg",
+    "ambience": "/scenes/airport-ambience.wav",
+    "tutorRole": "체크인 카운터 직원",
+    "learnerRole": "탑승 수속하는 여행객",
+    "descriptionKo": "체크인, 수하물, 게이트 안내까지 — 공항에서 살아남기."
+  },
+  {
+    "id": "hotel",
+    "title": "Hotel",
+    "titleKo": "호텔",
+    "image": "/scenes/hotel.svg",
+    "ambience": "/scenes/hotel-ambience.wav",
+    "tutorRole": "호텔 프런트 직원",
+    "learnerRole": "체크인하는 투숙객",
+    "descriptionKo": "체크인부터 룸서비스 요청, 컴플레인까지 호텔 영어 연습."
+  },
+  {
+    "id": "restaurant",
+    "title": "Restaurant",
+    "titleKo": "레스토랑",
+    "image": "/scenes/restaurant.svg",
+    "ambience": "/scenes/restaurant-ambience.wav",
+    "tutorRole": "레스토랑 서버",
+    "learnerRole": "식사하러 온 손님",
+    "descriptionKo": "메뉴 추천 받기, 주문, 계산까지 레스토랑 풀코스."
+  },
+  {
+    "id": "interview",
+    "title": "Job Interview",
+    "titleKo": "면접",
+    "image": "/scenes/interview.svg",
+    "ambience": "/scenes/interview-ambience.wav",
+    "tutorRole": "면접관",
+    "learnerRole": "지원자",
+    "descriptionKo": "자기소개, 강점과 약점, 지원 동기 — 영어 면접 실전 연습."
+  },
+  {
+    "id": "date",
+    "title": "First Date",
+    "titleKo": "데이트",
+    "image": "/scenes/date.svg",
+    "tutorRole": "소개팅 상대",
+    "learnerRole": "소개팅에 나간 사람",
+    "descriptionKo": "설레는 첫 데이트. 자연스럽게 서로를 알아가는 대화 연습."
+  },
+  {
+    "id": "hospital",
+    "title": "Hospital",
+    "titleKo": "병원",
+    "image": "/scenes/hospital.svg",
+    "tutorRole": "의사",
+    "learnerRole": "증상을 설명하러 온 환자",
+    "descriptionKo": "아픈 곳 설명하기, 처방 이해하기 — 해외에서 병원 가기."
+  },
+  {
+    "id": "shopping",
+    "title": "Shopping",
+    "titleKo": "쇼핑",
+    "image": "/scenes/shopping.svg",
+    "tutorRole": "옷가게 점원",
+    "learnerRole": "쇼핑하는 손님",
+    "descriptionKo": "사이즈 문의, 교환·환불, 가격 흥정까지 쇼핑 영어."
+  }
+]
