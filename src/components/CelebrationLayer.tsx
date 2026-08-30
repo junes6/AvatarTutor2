@@ -3,8 +3,6 @@
 // 칭찬 이펙트 — 점수 팡(콘페티), 콤보 카운터, XP 상승 애니메이션.
 // trigger 값이 바뀔 때마다 터진다.
 
-import { useEffect, useState } from "react";
-
 interface Particle {
   id: number;
   x: number;
@@ -24,38 +22,9 @@ interface Props {
 }
 
 export default function CelebrationLayer({ trigger, combo, xpGain, bannerText }: Props) {
-  const [particles, setParticles] = useState<Particle[]>([]);
-  const [xpPop, setXpPop] = useState<{ id: number; amount: number } | null>(null);
-  const [banner, setBanner] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (trigger === 0) return;
-    const batch: Particle[] = Array.from({ length: 28 }, (_, i) => ({
-      id: trigger * 100 + i,
-      x: 10 + Math.random() * 80,
-      color: COLORS[i % COLORS.length],
-      delay: Math.random() * 0.25,
-      size: 6 + Math.random() * 8,
-      drift: (Math.random() - 0.5) * 120,
-    }));
-    setParticles(batch);
-    const t = setTimeout(() => setParticles([]), 1800);
-    return () => clearTimeout(t);
-  }, [trigger]);
-
-  useEffect(() => {
-    if (xpGain === null || xpGain <= 0) return;
-    setXpPop({ id: Date.now(), amount: xpGain });
-    const t = setTimeout(() => setXpPop(null), 1600);
-    return () => clearTimeout(t);
-  }, [xpGain]);
-
-  useEffect(() => {
-    if (!bannerText) return;
-    setBanner(bannerText);
-    const t = setTimeout(() => setBanner(null), 2200);
-    return () => clearTimeout(t);
-  }, [bannerText]);
+  // 애니메이션 종료 뒤에는 CSS가 투명 상태를 유지한다. 파생 상태와 타이머를
+  // 두지 않고 trigger를 key로 사용하면 같은 효과를 더 안정적으로 재시작한다.
+  const particles = trigger > 0 ? createParticles(trigger) : [];
 
   return (
     <div className="pointer-events-none fixed inset-0 z-50 overflow-hidden">
@@ -76,12 +45,12 @@ export default function CelebrationLayer({ trigger, combo, xpGain, bannerText }:
         />
       ))}
       {/* XP 팝업 */}
-      {xpPop && (
+      {xpGain !== null && xpGain > 0 && (
         <div
-          key={xpPop.id}
+          key={`xp-${trigger}-${xpGain}`}
           className="absolute left-1/2 top-[30%] -translate-x-1/2 text-3xl font-black text-amber-300 drop-shadow-lg animate-[xpFloat_1.5s_ease-out_forwards]"
         >
-          +{xpPop.amount} XP
+          +{xpGain} XP
         </div>
       )}
       {/* 콤보 */}
@@ -92,13 +61,29 @@ export default function CelebrationLayer({ trigger, combo, xpGain, bannerText }:
         </div>
       )}
       {/* 스테이지 배너 */}
-      {banner && (
+      {bannerText && (
         <div className="absolute inset-x-0 top-[42%] flex justify-center">
-          <div className="px-6 py-3 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 text-xl font-bold text-white animate-[bannerIn_2.2s_ease]">
-            {banner}
+          <div key={`banner-${trigger}-${bannerText}`} className="px-6 py-3 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 text-xl font-bold text-white animate-[bannerIn_2.2s_ease_forwards]">
+            {bannerText}
           </div>
         </div>
       )}
     </div>
   );
+}
+
+function seeded(seed: number): number {
+  const value = Math.sin(seed * 12.9898) * 43758.5453;
+  return value - Math.floor(value);
+}
+
+function createParticles(trigger: number): Particle[] {
+  return Array.from({ length: 28 }, (_, index) => ({
+    id: trigger * 100 + index,
+    x: 10 + seeded(trigger * 101 + index) * 80,
+    color: COLORS[index % COLORS.length],
+    delay: seeded(trigger * 211 + index) * 0.25,
+    size: 6 + seeded(trigger * 307 + index) * 8,
+    drift: (seeded(trigger * 401 + index) - 0.5) * 120,
+  }));
 }

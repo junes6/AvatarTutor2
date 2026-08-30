@@ -1,9 +1,10 @@
-// LLM 어댑터 — Anthropic Claude가 기본, 키가 없으면 목(mock)으로 폴백.
+// LLM 어댑터 — Anthropic/OpenAI를 선택하며, 키가 없으면 목(mock)으로 폴백.
 
-import { isMockLLM } from "../config";
+import { getLLMProvider } from "../config";
 import type { TokenUsage } from "../types";
 import { chatAnthropic } from "./anthropic";
 import { chatMock } from "./mock";
+import { chatOpenAI } from "./openai";
 
 export interface LLMMessage {
   role: "user" | "assistant";
@@ -20,7 +21,10 @@ export async function chatLLM(opts: {
   messages: LLMMessage[];
   maxTokens?: number;
   feature: string; // usage 로깅용
+  signal?: AbortSignal;
 }): Promise<LLMResult> {
-  if (isMockLLM()) return chatMock(opts);
-  return chatAnthropic(opts);
+  const provider = getLLMProvider();
+  if (provider === "anthropic") return chatAnthropic(opts);
+  if (provider === "openai") return chatOpenAI(opts);
+  return chatMock(opts);
 }

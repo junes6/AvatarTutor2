@@ -1,5 +1,5 @@
-// 러닝모드 단계 엔진 — LLM의 stage_signal을 받아 단계를 진행하되,
-// LLM이 신호를 놓쳐도 세션이 멈추지 않도록 안전장치(턴 상한)를 둔다.
+// 러닝모드 단계 엔진 — LLM의 stage_signal을 받되,
+// 학습자가 실제 숙달 조건을 채운 경우에만 다음 단계로 진행한다.
 
 import { getUnit } from "../content";
 import { getDueItems, reviewResult } from "../srs";
@@ -7,14 +7,6 @@ import { findExpression } from "../content";
 import type { StageState, TutorTurnOutput, Judgment, LearningStage } from "../types";
 
 const STAGE_ORDER: LearningStage[] = ["review", "intro", "practice", "roleplay", "done"];
-const MAX_TURNS: Record<LearningStage, number> = {
-  review: 10,
-  intro: 16,
-  practice: 14,
-  roleplay: 12,
-  done: 99,
-};
-
 export function initStageState(): StageState {
   const due = getDueItems(3);
   const reviewItems = due
@@ -75,9 +67,13 @@ export function applyTurn(
     }
   }
 
-  // 새 표현 소개 카운트
+  // 새 표현 소개 카운트. LLM이 같은 id를 반복하거나 순서를 건너뛰어도
+  // 소개 완료 수가 잘못 늘어나지 않게 현재 차례의 id만 인정한다.
   if (st.stage === "intro" && output.new_expression && validIds.has(output.new_expression)) {
-    st.introIndex = Math.min(unit.expressions.length, st.introIndex + 1);
+    const expected = unit.expressions[st.introIndex]?.id;
+    if (output.new_expression === expected) {
+      st.introIndex = Math.min(unit.expressions.length, st.introIndex + 1);
+    }
   }
 
   // 따라 말하기 판정 → 콤보/XP
@@ -110,13 +106,13 @@ export function applyTurn(
 
   // ── 단계 전환 판단 ──
   let advance = output.stage_signal === "advance";
-  // LLM이 진행을 놓쳐도 멈추지 않게 하는 안전장치
-  if (!advance && st.turnsInStage >= MAX_TURNS[st.stage]) advance = true;
-  // 조건 미충족 시 조기 진행 방지
+  // 턴 수는 난이도를 낮추거나 힌트를 줄 근거일 뿐, 숙달 조건을 우회하는
+  // 자동 진행 사유가 아니다. 각 단계의 실제 완료 조건을 항상 강제한다.
   if (advance) {
-    if (st.stage === "intro" && st.introIndex < unit.expressions.length && st.turnsInStage < MAX_TURNS.intro) advance = false;
-    if (st.stage === "practice" && st.practicedIds.length < 3 && st.turnsInStage < MAX_TURNS.practice) advance = false;
-    if (st.stage === "roleplay" && st.roleplayUsedIds.length < 2 && st.turnsInStage < MAX_TURNS.roleplay) advance = false;
+    if (st.stage === "review" && st.reviewItems.some((item) => item.result !== "pass")) advance = false;
+    if (st.stage === "intro" && st.introIndex < unit.expressions.length) advance = false;
+    if (st.stage === "practice" && st.practicedIds.length < 3) advance = false;
+    if (st.stage === "roleplay" && st.roleplayUsedIds.length < 2) advance = false;
   }
 
   if (advance && st.stage !== "done") {

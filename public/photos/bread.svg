@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky-bread" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a16207"/>
+      <stop offset="0.5" stop-color="#d97706"/>
+      <stop offset="1" stop-color="#fef3c7"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#sky-bread)"/>
+  
+  <ellipse cx="600" cy="520" rx="330" ry="215" fill="#b45309"/>
+  <ellipse cx="600" cy="500" rx="310" ry="195" fill="#d97706"/>
+  <g stroke="#78350f" stroke-width="14" stroke-linecap="round" fill="none">
+    <path d="M400 430 q60 -50 120 0"/><path d="M560 410 q60 -50 120 0"/><path d="M700 440 q50 -46 110 0"/>
+  </g>
+  <rect x="0" y="760" width="1200" height="140" fill="#78350f" opacity="0.5"/>
+</svg>

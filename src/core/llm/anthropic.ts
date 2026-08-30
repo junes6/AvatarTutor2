@@ -4,6 +4,7 @@ import { logUsage } from "../usage";
 import type { LLMMessage, LLMResult } from "./index";
 
 let client: Anthropic | null = null;
+const LLM_REQUEST_TIMEOUT_MS = 15_000;
 function getClient(): Anthropic {
   if (!client) client = new Anthropic({ apiKey: config.anthropic.apiKey });
   return client;
@@ -14,6 +15,7 @@ export async function chatAnthropic(opts: {
   messages: LLMMessage[];
   maxTokens?: number;
   feature: string;
+  signal?: AbortSignal;
 }): Promise<LLMResult> {
   const messages: Anthropic.MessageParam[] = opts.messages.map((m) => ({
     role: m.role,
@@ -31,7 +33,23 @@ export async function chatAnthropic(opts: {
     params.thinking = { type: "disabled" };
   }
 
-  const response = await getClient().messages.create(params);
+  const controller = new AbortController();
+  const abortFromCaller = () => controller.abort(opts.signal?.reason);
+  if (opts.signal?.aborted) abortFromCaller();
+  else opts.signal?.addEventListener("abort", abortFromCaller, { once: true });
+  const timeout = setTimeout(() => controller.abort(new Error("LLM request timed out")), LLM_REQUEST_TIMEOUT_MS);
+
+  let response: Anthropic.Message;
+  try {
+    response = await getClient().messages.create(params, {
+      signal: controller.signal,
+      timeout: LLM_REQUEST_TIMEOUT_MS,
+      maxRetries: 0,
+    });
+  } finally {
+    clearTimeout(timeout);
+    opts.signal?.removeEventListener("abort", abortFromCaller);
+  }
 
   let text = "";
   for (const block of response.content) {

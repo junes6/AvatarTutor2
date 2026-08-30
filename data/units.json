@@ -43,7 +43,7 @@
   },
   {
     "id": "unit-03",
-    "level": 1,
+    "level": 2,
     "order": 3,
     "title": "Asking for Directions",
     "titleKo": "길 묻기",
@@ -64,7 +64,7 @@
   },
   {
     "id": "unit-04",
-    "level": 1,
+    "level": 2,
     "order": 4,
     "title": "Making Plans",
     "titleKo": "약속 잡기",
@@ -85,7 +85,7 @@
   },
   {
     "id": "unit-05",
-    "level": 1,
+    "level": 3,
     "order": 5,
     "title": "How Are You Feeling?",
     "titleKo": "감정 표현",
@@ -106,7 +106,7 @@
   },
   {
     "id": "unit-06",
-    "level": 1,
+    "level": 3,
     "order": 6,
     "title": "Talking About the Past",
     "titleKo": "과거 이야기",
@@ -127,7 +127,7 @@
   },
   {
     "id": "unit-07",
-    "level": 1,
+    "level": 3,
     "order": 7,
     "title": "Talking About Plans",
     "titleKo": "계획 말하기",
@@ -148,7 +148,7 @@
   },
   {
     "id": "unit-08",
-    "level": 1,
+    "level": 4,
     "order": 8,
     "title": "Asking for Help",
     "titleKo": "부탁하기",
@@ -169,7 +169,7 @@
   },
   {
     "id": "unit-09",
-    "level": 1,
+    "level": 4,
     "order": 9,
     "title": "Sharing Opinions",
     "titleKo": "의견 말하기",
@@ -190,7 +190,7 @@
   },
   {
     "id": "unit-10",
-    "level": 1,
+    "level": 4,
     "order": 10,
     "title": "On the Phone",
     "titleKo": "전화 표현",
@@ -207,6 +207,27 @@
       "tutorRole": "전화를 받은 회사 직원",
       "learnerRole": "담당자와 통화하려는 사람",
       "goalKo": "전화 표현으로 담당자를 찾고, 부재 시 메시지 남기기"
+    }
+  },
+  {
+    "id": "unit-11",
+    "level": 5,
+    "order": 11,
+    "title": "Disagreeing Diplomatically",
+    "titleKo": "완곡하게 이견 조율하기",
+    "topic": "상대의 관점을 인정하면서 이견을 제시하고 근거를 물어 타협안 찾기",
+    "expressions": [
+      { "id": "u11e1", "en": "I see where you're coming from, but I have a different take.", "ko": "그렇게 생각하는 이유는 알겠지만, 저는 관점이 조금 달라요.", "example": "I see where you're coming from, but I have a different take on the launch date.", "exampleKo": "그렇게 생각하는 이유는 알겠지만, 출시일에 대해서는 제 관점이 조금 달라요." },
+      { "id": "u11e2", "en": "Could you walk me through your reasoning?", "ko": "그렇게 판단한 근거를 차근차근 설명해 주시겠어요?", "example": "Could you walk me through your reasoning before we make a decision?", "exampleKo": "결정하기 전에 그렇게 판단한 근거를 설명해 주시겠어요?" },
+      { "id": "u11e3", "en": "I wouldn't go so far as to say that.", "ko": "저는 그렇게까지 단정 짓지는 않을 것 같아요.", "example": "I agree there is a risk, but I wouldn't go so far as to say that the plan will fail.", "exampleKo": "위험이 있다는 데는 동의하지만, 계획이 실패할 거라고까지 말하지는 않겠어요." },
+      { "id": "u11e4", "en": "That said, there may be some room for compromise.", "ko": "그렇다 해도, 타협할 여지는 조금 있을 것 같아요.", "example": "The schedule is tight. That said, there may be some room for compromise.", "exampleKo": "일정이 빠듯하긴 해요. 그렇다 해도, 타협할 여지는 조금 있을 것 같아요." },
+      { "id": "u11e5", "en": "We may have to agree to disagree.", "ko": "이 부분은 서로 의견이 다르다는 걸 인정해야 할 것 같아요.", "example": "We may have to agree to disagree, but we can still align on the next step.", "exampleKo": "이 부분은 의견 차이를 인정하되, 다음 단계에는 합의할 수 있어요." }
+    ],
+    "situation": {
+      "setting": "해외 파트너와 화상회의에서 제품 출시 일정과 품질 우선순위를 조율하는 상황",
+      "tutorRole": "빠른 출시를 원하는 해외 프로젝트 파트너",
+      "learnerRole": "품질 위험을 설명하며 타협안을 찾는 팀 리드",
+      "goalKo": "상대 관점을 인정하고, 근거를 물은 뒤, 완곡한 이견과 타협안을 제시하기"
     }
   }
 ]

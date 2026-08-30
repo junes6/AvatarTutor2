@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky-food" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7f1d1d"/>
+      <stop offset="0.5" stop-color="#b91c1c"/>
+      <stop offset="1" stop-color="#fca5a5"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#sky-food)"/>
+  
+  <ellipse cx="600" cy="500" rx="330" ry="290" fill="#fef2f2"/>
+  <ellipse cx="600" cy="500" rx="255" ry="220" fill="#fed7aa"/>
+  <g fill="#dc2626"><circle cx="520" cy="440" r="46"/><circle cx="660" cy="470" r="40"/><circle cx="580" cy="580" r="38"/></g>
+  <g fill="#166534"><ellipse cx="700" cy="560" rx="42" ry="24"/><ellipse cx="470" cy="560" rx="36" ry="20"/></g>
+</svg>

@@ -24,7 +24,10 @@ export function readJSON<T>(name: string, fallback: T): T {
   try {
     if (!fs.existsSync(file)) return fallback;
     return JSON.parse(fs.readFileSync(file, "utf8")) as T;
-  } catch {
+  } catch (error) {
+    // 손상된 상태를 기본값으로 조용히 가장하면 다음 저장에서 사용자 데이터가
+    // 덮어써질 수 있다. 복구 가능한 운영 로그를 반드시 남긴다.
+    console.error(`[store] failed to read ${file}`, error);
     return fallback;
   }
 }
@@ -32,9 +35,27 @@ export function readJSON<T>(name: string, fallback: T): T {
 export function writeJSON<T>(name: string, data: T): void {
   const file = fileFor(name);
   ensureDir(path.dirname(file));
-  const tmp = file + ".tmp";
-  fs.writeFileSync(tmp, JSON.stringify(data, null, 2), "utf8");
-  fs.renameSync(tmp, file);
+  const tmp = `${file}.${process.pid}.${Math.random().toString(36).slice(2, 8)}.tmp`;
+  try {
+    fs.writeFileSync(tmp, JSON.stringify(data, null, 2), "utf8");
+    fs.renameSync(tmp, file);
+  } catch (error) {
+    try {
+      fs.unlinkSync(tmp);
+    } catch {}
+    throw error;
+  }
+}
+
+export function deleteJSON(name: string): boolean {
+  const file = fileFor(name);
+  try {
+    fs.unlinkSync(file);
+    return true;
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return false;
+    throw error;
+  }
 }
 
 export function listNames(dir: string): string[] {

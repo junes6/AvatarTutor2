@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky-beach" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0ea5e9"/>
+      <stop offset="0.5" stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#bae6fd"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#sky-beach)"/>
+  
+  <rect x="0" y="520" width="1200" height="200" fill="#0284c7"/>
+  <path d="M0 700 Q300 660 600 700 T1200 700 L1200 900 L0 900 Z" fill="#fde68a"/>
+  <g fill="#fff" opacity="0.6">
+    <path d="M0 690 Q150 670 300 690 T600 690" stroke="#fff" stroke-width="8" fill="none"/>
+  </g>
+  <circle cx="220" cy="180" r="70" fill="#fef9c3"/>
+</svg>

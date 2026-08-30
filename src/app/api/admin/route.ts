@@ -2,17 +2,22 @@
 
 import { NextResponse } from "next/server";
 import { aggregateDaily } from "@/core/usage";
-import { PRICING, isMockLLM, isMockSTT, isMockTTS, config } from "@/core/config";
+import { PRICING, getLLMProvider, isMockSTT, isMockTTS, config } from "@/core/config";
 
 export async function GET() {
+  const llmProvider = getLLMProvider();
   return NextResponse.json({
     daily: aggregateDaily(),
     pricing: PRICING,
     providers: {
-      llm: isMockLLM() ? "mock" : config.anthropic.model,
+      llm: llmProvider === "openai"
+        ? config.openai.llmModel
+        : llmProvider === "anthropic"
+          ? config.anthropic.model
+          : "mock",
       stt: isMockSTT() ? "mock" : config.openai.sttModel,
       tts: isMockTTS() ? "mock" : config.tts.provider === "elevenlabs" ? "elevenlabs" : config.openai.ttsModel,
       pronunciation: config.azure.key ? "azure" : "similarity-fallback",
     },
-  });
+  }, { headers: { "Cache-Control": "private, no-store" } });
 }

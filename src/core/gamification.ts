@@ -12,7 +12,9 @@ export const DEFAULT_USER: UserState = {
   settings: {
     subtitles: "always",
     speechRate: 1.0,
-    notifications: { enabled: true, morning: true, quiz: true, checkin: true },
+    notifications: { enabled: true, morning: true, quiz: true, checkin: true, life: true },
+    dailyProactiveLimit: 3,
+    coachingCards: true,
   },
   completedUnits: [],
   dailyGoal: { date: "", reviewsDone: 0, unitDone: false, callSeconds: 0 },
@@ -20,6 +22,13 @@ export const DEFAULT_USER: UserState = {
 
 export function getUser(): UserState {
   const u = readJSON<UserState>("user", DEFAULT_USER);
+  // 이전 버전에서 저장된 상태에도 새 설정 키가 항상 존재하도록 기본값을 덮어씌운다.
+  u.settings = {
+    ...DEFAULT_USER.settings,
+    ...(u.settings ?? {}),
+    notifications: { ...DEFAULT_USER.settings.notifications, ...(u.settings?.notifications ?? {}) },
+  };
+  if (!u.dailyGoal) u.dailyGoal = { ...DEFAULT_USER.dailyGoal };
   // 날짜가 바뀌면 오늘의 목표 리셋
   const today = todayStr();
   if (u.dailyGoal.date !== today) {

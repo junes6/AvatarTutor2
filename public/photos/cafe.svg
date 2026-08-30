@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky-cafe" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7c2d12"/>
+      <stop offset="0.5" stop-color="#b45309"/>
+      <stop offset="1" stop-color="#fde68a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#sky-cafe)"/>
+  
+  <rect x="0" y="600" width="1200" height="300" fill="#78350f"/>
+  <rect x="0" y="580" width="1200" height="26" fill="#92400e"/>
+  <g><ellipse cx="420" cy="560" rx="120" ry="30" fill="#fff7ed"/><path d="M300 560 q120 90 240 0z" fill="#fff7ed"/>
+  <path d="M540 545 q60 10 0 45" stroke="#fff7ed" stroke-width="16" fill="none"/></g>
+  <ellipse cx="420" cy="556" rx="96" ry="22" fill="#c2854a"/>
+  <g fill="#fef3c7" opacity="0.55"><circle cx="880" cy="360" r="34"/><circle cx="1000" cy="300" r="26"/></g>
+</svg>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky-ramen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#78350f"/>
+      <stop offset="0.5" stop-color="#a16207"/>
+      <stop offset="1" stop-color="#fef08a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#sky-ramen)"/>
+  
+  <ellipse cx="600" cy="520" rx="340" ry="270" fill="#1c1917"/>
+  <ellipse cx="600" cy="520" rx="300" ry="235" fill="#b45309"/>
+  <g stroke="#fef3c7" stroke-width="12" fill="none" opacity="0.9">
+    <path d="M400 430 q30 90 0 170"/><path d="M460 430 q30 90 0 170"/><path d="M520 430 q30 90 0 170"/><path d="M580 430 q30 90 0 170"/><path d="M640 430 q30 90 0 170"/><path d="M700 430 q30 90 0 170"/><path d="M760 430 q30 90 0 170"/>
+  </g>
+  <circle cx="760" cy="450" r="52" fill="#fef9c3"/><circle cx="760" cy="450" r="26" fill="#f59e0b"/>
+  <rect x="470" y="590" width="150" height="30" rx="12" fill="#166534"/>
+</svg>

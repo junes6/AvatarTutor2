@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky-market" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#065f46"/>
+      <stop offset="0.5" stop-color="#16a34a"/>
+      <stop offset="1" stop-color="#fef08a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#sky-market)"/>
+  
+  <rect x="0" y="620" width="1200" height="280" fill="#14532d"/>
+  <g>
+    <rect x="90" y="540" width="170" height="110" rx="18" fill="#dc2626" opacity="0.9"/><rect x="300" y="540" width="170" height="110" rx="18" fill="#f59e0b" opacity="0.9"/><rect x="510" y="540" width="170" height="110" rx="18" fill="#22c55e" opacity="0.9"/><rect x="720" y="540" width="170" height="110" rx="18" fill="#a855f7" opacity="0.9"/><rect x="930" y="540" width="170" height="110" rx="18" fill="#0ea5e9" opacity="0.9"/>
+  </g>
+  <g fill="#fefce8" opacity="0.7">
+    <path d="M0 260 L1200 260 L1200 320 L0 320 Z"/>
+  </g>
+  <g fill="#f97316"><path d="M60 320 l90 0 l-45 90 z"/><path d="M260 320 l90 0 l-45 90 z"/><path d="M460 320 l90 0 l-45 90 z"/><path d="M660 320 l90 0 l-45 90 z"/><path d="M860 320 l90 0 l-45 90 z"/><path d="M1060 320 l90 0 l-45 90 z"/></g>
+</svg>

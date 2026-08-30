@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky-pet" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#78350f"/>
+      <stop offset="0.5" stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#fef3c7"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#sky-pet)"/>
+  
+  <ellipse cx="600" cy="640" rx="300" ry="180" fill="#b45309"/>
+  <circle cx="600" cy="430" r="180" fill="#d97706"/>
+  <ellipse cx="450" cy="390" rx="60" ry="110" fill="#92400e"/>
+  <ellipse cx="750" cy="390" rx="60" ry="110" fill="#92400e"/>
+  <circle cx="545" cy="420" r="20" fill="#1c1917"/><circle cx="655" cy="420" r="20" fill="#1c1917"/>
+  <ellipse cx="600" cy="486" rx="34" ry="24" fill="#1c1917"/>
+  <path d="M566 500 q34 40 68 0" stroke="#1c1917" stroke-width="10" fill="none" stroke-linecap="round"/>
+</svg>

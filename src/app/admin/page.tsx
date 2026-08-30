@@ -45,7 +45,7 @@ export default function AdminPage() {
   return (
     <div className="px-5 py-6 pb-14">
       <header className="flex items-center gap-3 mb-6">
-        <button onClick={() => router.push("/settings")} className="text-white/60 text-lg">
+        <button onClick={() => router.push("/settings")} className="min-h-11 px-2 text-white/60 text-lg">
           ←
         </button>
         <h1 className="text-lg font-bold">사용량 · 원가</h1>
@@ -99,7 +99,9 @@ export default function AdminPage() {
         ))}
       </div>
 
-      <p className="text-[10px] text-white/30 mt-4">* 단가는 src/core/config.ts의 PRICING 상수 기준 추정치입니다.</p>
+      <p className="text-[10px] text-white/30 mt-4">
+        * 텍스트·STT·TTS의 단순 추정치이며, Realtime 음성 비용은 아직 포함하지 않습니다.
+      </p>
     </div>
   );
 }

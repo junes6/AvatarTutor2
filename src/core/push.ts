@@ -8,6 +8,8 @@ interface PushStore {
   subscriptions: webpush.PushSubscription[];
 }
 
+const MAX_SUBSCRIPTIONS = 20;
+
 let configured = false;
 function ensureConfigured(): boolean {
   if (!config.push.publicKey || !config.push.privateKey) return false;
@@ -20,16 +22,25 @@ function ensureConfigured(): boolean {
 
 export function addSubscription(sub: webpush.PushSubscription) {
   const store = readJSON<PushStore>("push", { subscriptions: [] });
-  if (!store.subscriptions.some((s) => s.endpoint === sub.endpoint)) {
+  const existing = store.subscriptions.findIndex((s) => s.endpoint === sub.endpoint);
+  if (existing >= 0) {
+    // 브라우저가 키를 갱신한 경우 기존 endpoint 항목을 최신 값으로 교체한다.
+    store.subscriptions[existing] = sub;
+    writeJSON("push", store);
+  } else {
     store.subscriptions.push(sub);
+    if (store.subscriptions.length > MAX_SUBSCRIPTIONS) {
+      store.subscriptions = store.subscriptions.slice(-MAX_SUBSCRIPTIONS);
+    }
     writeJSON("push", store);
   }
 }
 
-export async function sendPush(title: string, body: string, url = "/") {
+export async function sendPush(title: string, body: string, url = "/", tag?: string) {
   if (!ensureConfigured()) return;
   const store = readJSON<PushStore>("push", { subscriptions: [] });
-  const payload = JSON.stringify({ title, body, url });
+  // tag가 같으면 기기 알림이 하나로 합쳐진다 — 예약 답장이 몰려도 알림이 쌓이지 않는다.
+  const payload = JSON.stringify({ title, body, url, tag: tag ?? url });
   const alive: webpush.PushSubscription[] = [];
   for (const sub of store.subscriptions) {
     try {

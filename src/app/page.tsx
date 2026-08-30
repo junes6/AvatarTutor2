@@ -1,288 +1,271 @@
 "use client";
 
-// 홈 — 메신저처럼: 친구 목록 + 오늘의 목표 + 러닝 유닛 + 프리토킹 시나리오
+/* eslint-disable @next/next/no-img-element */
 
-import { useCallback, useEffect, useState } from "react";
+// 홈 = 채팅 목록. 카톡과 같은 정보 밀도로 친구 목록을 보여준다.
+
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import TabBar from "@/components/TabBar";
 import { sfxMessage } from "@/lib/sfx";
+import { listTime } from "@/lib/time";
+import type { PendingIntro } from "@/core/types";
 
-interface StateData {
-  user: {
-    onboarded: boolean;
-    name: string;
-    level: number;
-    xp: number;
-    streak: { count: number };
-    dailyGoal: { reviewsDone: number; unitDone: boolean; callSeconds: number };
-  };
-  xp: { level: number; cur: number; next: number };
-  tutors: {
-    id: string;
-    name: string;
-    koName: string;
-    emoji: string;
-    color: string;
-    bio: string;
-    profileImage: string;
-    intimacy: { level: number; xp: number; next: number | null };
-    unread: number;
-    lastMessage: { text: string; ts: number; role: string } | null;
-  }[];
-  units: { id: string; title: string; titleKo: string; order: number; completed: boolean; expressionCount: number }[];
-  scenarios: { id: string; title: string; titleKo: string; image: string; descriptionKo: string }[];
-  srsDueCount: number;
-  mock: { llm: boolean; stt: boolean; tts: boolean };
+interface FriendCard {
+  id: string;
+  name: string;
+  koName: string;
+  emoji: string;
+  color: string;
+  bio: string;
+  profileImage: string;
+  status: "active" | "left";
+  intimacy: { level: number; xp: number; next: number | null };
+  unread: number;
+  lastMessage: { text: string; ts: number; role: string; kind: string } | null;
+  typing: boolean;
+  awake: boolean;
+  localTime: string;
+  city: string;
+  travelling: boolean;
 }
+
+interface HomeState {
+  user: { onboarded: boolean; name: string; level: number; streak: { count: number } };
+  friends: FriendCard[];
+  archivedFriends: FriendCard[];
+  pendingIntro: PendingIntro | null;
+  srsDueCount: number;
+}
+
+const TICK_INTERVAL_MS = 45_000;
 
 export default function HomePage() {
   const router = useRouter();
-  const [state, setState] = useState<StateData | null>(null);
-  const [picker, setPicker] = useState<{ kind: "unit" | "scenario" | "free"; id?: string } | null>(null);
+  const [state, setState] = useState<HomeState | null>(null);
+  const [loadError, setLoadError] = useState(false);
+  const [showArchived, setShowArchived] = useState(false);
+  const unreadRef = useRef(0);
 
   const load = useCallback(async () => {
-    const res = await fetch("/api/state");
-    const data: StateData = await res.json();
-    if (!data.user.onboarded) {
-      router.replace("/onboarding");
-      return;
+    try {
+      const response = await fetch("/api/state", { cache: "no-store" });
+      if (!response.ok) throw new Error("state load failed");
+      const data = (await response.json()) as HomeState;
+      if (!data?.user) throw new Error("invalid state response");
+      if (!data.user.onboarded) {
+        router.replace("/onboarding");
+        return;
+      }
+      const unread = data.friends.reduce((total, friend) => total + friend.unread, 0);
+      if (unread > unreadRef.current) sfxMessage();
+      unreadRef.current = unread;
+      setState(data);
+      setLoadError(false);
+    } catch {
+      setLoadError(true);
     }
-    setState(data);
   }, [router]);
 
   useEffect(() => {
-    load();
+    const frame = window.requestAnimationFrame(() => void load());
+    return () => window.cancelAnimationFrame(frame);
   }, [load]);
 
-  // 능동 메시지 tick — 진입 시 + 3분마다
+  // 예약 도착 · 능동 메시지 · 새 친구 소개를 주기적으로 확인한다.
   useEffect(() => {
     const tick = async () => {
       try {
-        const res = await fetch("/api/proactive", { method: "POST" });
-        const data = await res.json();
-        if (data.generated) {
-          sfxMessage();
-          load();
-        }
-      } catch {}
+        const response = await fetch("/api/tick", { method: "POST" });
+        const data = await response.json();
+        if (data.delivered > 0 || data.generated) await load();
+      } catch {
+        // 조용히 넘어가되 다음 tick에서 다시 시도한다.
+      }
     };
-    tick();
-    const iv = setInterval(tick, 3 * 60 * 1000);
-    return () => clearInterval(iv);
+    void tick();
+    const interval = window.setInterval(() => void tick(), TICK_INTERVAL_MS);
+    const onVisible = () => {
+      if (document.visibilityState === "visible") void tick();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      window.clearInterval(interval);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
   }, [load]);
 
-  if (!state) {
-    return (
-      <div className="min-h-dvh flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-white/20 border-t-emerald-400 rounded-full animate-spin" />
-      </div>
-    );
-  }
+  const totalUnread = useMemo(
+    () => state?.friends.reduce((total, friend) => total + friend.unread, 0) ?? 0,
+    [state],
+  );
 
-  const { user, xp, tutors, units, scenarios, srsDueCount, mock } = state;
-  const goalCall = Math.min(5, Math.floor(user.dailyGoal.callSeconds / 60));
-  const nextUnit = units.find((u) => !u.completed);
+  if (!state && loadError) return <LoadError onRetry={() => void load()} />;
+  if (!state) return <AppLoading />;
+
+  const { friends, archivedFriends, pendingIntro } = state;
 
   return (
-    <div className="pb-10">
-      {/* 헤더 */}
-      <header className="px-5 pt-8 pb-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="text-xs text-white/40">안녕하세요 👋</div>
-            <h1 className="text-xl font-bold">{user.name}님</h1>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="text-center">
-              <div className="text-lg font-black text-orange-400">🔥 {user.streak.count}</div>
-              <div className="text-[9px] text-white/40">스트릭</div>
-            </div>
-            <button onClick={() => router.push("/settings")} className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center">
-              ⚙️
+    <main className="list-screen">
+      <header className="list-topbar">
+        <h1>채팅</h1>
+        <div className="list-topbar-actions">
+          {state.srsDueCount > 0 && (
+            <button type="button" className="list-chip" onClick={() => router.push("/me")}>
+              복습 {state.srsDueCount}
             </button>
-          </div>
+          )}
+          <button type="button" className="icon-button" aria-label="마이페이지" onClick={() => router.push("/me")}>
+            <PersonIcon />
+          </button>
         </div>
-        {/* XP 바 */}
-        <div className="mt-4">
-          <div className="flex justify-between text-[11px] text-white/50 mb-1">
-            <span>Lv.{xp.level}</span>
-            <span>
-              {xp.cur} / {xp.next} XP
-            </span>
-          </div>
-          <div className="h-2 rounded-full bg-white/10 overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-700" style={{ width: `${Math.min(100, (xp.cur / xp.next) * 100)}%` }} />
-          </div>
-        </div>
-        {(mock.llm || mock.stt || mock.tts) && (
-          <div className="mt-3 text-[11px] rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 px-3 py-2">
-            ⚠️ 목(mock) 모드: {[mock.llm && "LLM", mock.stt && "STT", mock.tts && "TTS"].filter(Boolean).join(" · ")} API 키가 없어 시뮬레이션으로 동작해요 (.env.local 설정)
-          </div>
-        )}
       </header>
 
-      {/* 오늘의 목표 */}
-      <section className="px-5 mb-6">
-        <h2 className="text-sm font-bold text-white/70 mb-2">오늘의 목표</h2>
-        <div className="rounded-2xl bg-white/5 border border-white/10 p-4 space-y-2.5">
-          <GoalRow done={user.dailyGoal.reviewsDone >= Math.min(3, Math.max(1, srsDueCount))} label={`복습 ${Math.min(3, Math.max(1, srsDueCount))}개 (${user.dailyGoal.reviewsDone}개 완료${srsDueCount > 0 ? ` · ${srsDueCount}개 대기` : ""})`} />
-          <GoalRow done={user.dailyGoal.unitDone} label="새 유닛 1개 클리어" />
-          <GoalRow done={goalCall >= 5} label={`아무 친구와 5분 통화 (${goalCall}분)`} />
-        </div>
-      </section>
+      <div className="list-scroll">
+        {pendingIntro && <IntroPending intro={pendingIntro} />}
 
-      {/* 친구 목록 */}
-      <section className="px-5 mb-6">
-        <h2 className="text-sm font-bold text-white/70 mb-2">내 친구들</h2>
-        <div className="space-y-2">
-          {tutors.map((t) => (
-            <div key={t.id} className="rounded-2xl bg-white/5 border border-white/10 p-3 flex items-center gap-3">
-              <button onClick={() => router.push(`/chat/${t.id}`)} className="relative shrink-0">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={t.profileImage} alt={t.name} className="w-14 h-14 rounded-full object-cover border-2" style={{ borderColor: t.color }} />
-                {t.unread > 0 && (
-                  <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-bold flex items-center justify-center">
-                    {t.unread}
-                  </span>
-                )}
-              </button>
-              <button onClick={() => router.push(`/chat/${t.id}`)} className="flex-1 min-w-0 text-left">
-                <div className="flex items-center gap-1.5">
-                  <span className="font-bold text-sm">{t.name}</span>
-                  <span className="text-[10px] px-1.5 py-0.5 rounded-full" style={{ background: `${t.color}22`, color: t.color }}>
-                    {"💛".repeat(t.intimacy.level)}
-                  </span>
-                </div>
-                <div className="text-xs text-white/50 truncate mt-0.5">
-                  {t.lastMessage ? (t.lastMessage.role === "user" ? "나: " : "") + t.lastMessage.text : t.bio}
-                </div>
-              </button>
-              <button
-                onClick={() => setPicker({ kind: "free", id: t.id })}
-                className="shrink-0 w-11 h-11 rounded-full bg-emerald-600 flex items-center justify-center text-lg active:scale-95 transition-transform"
-                aria-label={`${t.name}에게 영상통화`}
-              >
-                📹
-              </button>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 러닝모드 */}
-      <section className="px-5 mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-sm font-bold text-white/70">러닝모드 · 초급</h2>
-          {nextUnit && <span className="text-[11px] text-emerald-400">다음: {nextUnit.titleKo}</span>}
-        </div>
-        <div className="grid grid-cols-2 gap-2">
-          {units.map((u) => (
-            <button
-              key={u.id}
-              onClick={() => setPicker({ kind: "unit", id: u.id })}
-              className={`rounded-2xl p-3.5 text-left border transition-colors ${
-                u.completed ? "bg-emerald-500/10 border-emerald-500/30" : "bg-white/5 border-white/10 hover:border-white/25"
-              }`}
-            >
-              <div className="text-[10px] text-white/40 mb-1">
-                Unit {u.order} {u.completed && "✅"}
-              </div>
-              <div className="font-bold text-sm leading-tight">{u.titleKo}</div>
-              <div className="text-[11px] text-white/50 mt-0.5">{u.title}</div>
-              <div className="text-[10px] text-white/35 mt-1.5">표현 {u.expressionCount}개</div>
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {/* 프리토킹 시나리오 */}
-      <section className="px-5">
-        <h2 className="text-sm font-bold text-white/70 mb-2">프리토킹 · 상황극</h2>
-        <div className="grid grid-cols-2 gap-2">
-          {scenarios.map((s) => (
-            <button
-              key={s.id}
-              onClick={() => setPicker({ kind: "scenario", id: s.id })}
-              className="relative rounded-2xl overflow-hidden h-24 text-left border border-white/10 group"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={s.image} alt="" className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-              <div className="absolute bottom-2 left-3">
-                <div className="font-bold text-sm">{s.titleKo}</div>
-                <div className="text-[10px] text-white/60">{s.title}</div>
-              </div>
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {/* 튜터 선택 시트 */}
-      {picker && (
-        <div className="fixed inset-0 z-50 flex flex-col justify-end bg-black/60" onClick={() => setPicker(null)}>
-          <div className="bg-slate-900 rounded-t-3xl p-5 border-t border-white/10" onClick={(e) => e.stopPropagation()}>
-            <h3 className="font-bold mb-1">
-              {picker.kind === "unit" ? "누구랑 배울까요?" : picker.kind === "scenario" ? "누구랑 연습할까요?" : "통화 방식을 선택하세요"}
-            </h3>
-            <p className="text-xs text-white/50 mb-4">
-              {picker.kind === "free" ? "자유 대화 또는 상황극을 고를 수 있어요" : "친구마다 목소리와 성격이 달라요"}
-            </p>
-            {picker.kind === "free" ? (
-              <div className="space-y-2">
-                <button
-                  onClick={() => router.push(`/call/${picker.id}?mode=freetalk`)}
-                  className="w-full rounded-2xl bg-emerald-600 p-4 text-left font-semibold"
-                >
-                  ☕ 그냥 수다 떨기 (프리토킹)
-                </button>
-                {nextUnit && (
-                  <button
-                    onClick={() => router.push(`/call/${picker.id}?mode=learning&unit=${nextUnit.id}`)}
-                    className="w-full rounded-2xl bg-indigo-600 p-4 text-left font-semibold"
-                  >
-                    📚 오늘의 유닛 배우기 ({nextUnit.titleKo})
-                  </button>
-                )}
-              </div>
-            ) : (
-              <div className="space-y-2">
-                {tutors.map((t) => (
-                  <button
-                    key={t.id}
-                    onClick={() =>
-                      router.push(
-                        picker.kind === "unit"
-                          ? `/call/${t.id}?mode=learning&unit=${picker.id}`
-                          : `/call/${t.id}?mode=freetalk&scenario=${picker.id}`,
-                      )
-                    }
-                    className="w-full rounded-2xl bg-white/5 border border-white/10 p-3 flex items-center gap-3 hover:border-white/30"
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={t.profileImage} alt="" className="w-11 h-11 rounded-full border-2" style={{ borderColor: t.color }} />
-                    <div className="text-left">
-                      <div className="font-bold text-sm">
-                        {t.name} {t.emoji}
-                      </div>
-                      <div className="text-[11px] text-white/50">{t.bio}</div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
+        {friends.length === 0 && !pendingIntro && (
+          <div className="list-empty">
+            <p>아직 대화 중인 친구가 없어요.</p>
+            <button type="button" onClick={() => router.push("/me")}>친구 찾아보기</button>
           </div>
-        </div>
-      )}
+        )}
+
+        <ul className="chat-list">
+          {friends.map((friend) => (
+            <li key={friend.id}>
+              <button type="button" className="chat-row" onClick={() => router.push(`/chat/${friend.id}`)}>
+                <span className="chat-row-avatar">
+                  <img src={friend.profileImage} alt="" />
+                  {friend.awake && <i className="chat-row-online" aria-label="접속 중" />}
+                  {friend.travelling && <i className="chat-row-travel" aria-hidden="true">✈️</i>}
+                </span>
+                <span className="chat-row-body">
+                  <span className="chat-row-title">
+                    <strong>{friend.koName}</strong>
+                    <em>{friend.emoji}</em>
+                    {friend.travelling && <span className="chat-row-city">{friend.city}</span>}
+                  </span>
+                  <span className="chat-row-preview">
+                    {friend.typing ? (
+                      <span className="chat-row-typing">입력 중<i /><i /><i /></span>
+                    ) : friend.lastMessage ? (
+                      `${friend.lastMessage.role === "user" ? "나: " : ""}${friend.lastMessage.text}`
+                    ) : (
+                      friend.bio
+                    )}
+                  </span>
+                </span>
+                <span className="chat-row-meta">
+                  <span className="chat-row-time">{friend.lastMessage ? listTime(friend.lastMessage.ts) : ""}</span>
+                  {friend.unread > 0 && <span className="chat-row-badge">{friend.unread > 99 ? "99+" : friend.unread}</span>}
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+
+        {archivedFriends.length > 0 && (
+          <section className="archived-section">
+            <button type="button" className="archived-toggle" onClick={() => setShowArchived((value) => !value)}>
+              보관된 대화 {archivedFriends.length}
+              <ChevronIcon className={showArchived ? "is-open" : ""} />
+            </button>
+            {showArchived && (
+              <ul className="chat-list is-archived">
+                {archivedFriends.map((friend) => (
+                  <li key={friend.id}>
+                    <button type="button" className="chat-row" onClick={() => router.push(`/chat/${friend.id}`)}>
+                      <span className="chat-row-avatar">
+                        <img src={friend.profileImage} alt="" />
+                      </span>
+                      <span className="chat-row-body">
+                        <span className="chat-row-title"><strong>{friend.koName}</strong></span>
+                        <span className="chat-row-preview">
+                          {friend.lastMessage?.text ?? "대화 기록이 보관되어 있어요"}
+                        </span>
+                      </span>
+                      <span className="chat-row-meta">
+                        <span className="chat-row-time">보관됨</span>
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        )}
+      </div>
+
+      <TabBar unread={totalUnread} />
+    </main>
+  );
+}
+
+function IntroPending({ intro }: { intro: PendingIntro }) {
+  // 남은 시간은 렌더 중이 아니라 마운트 후에 계산한다 (렌더는 순수해야 한다).
+  const [when, setWhen] = useState("");
+  useEffect(() => {
+    const update = () => {
+      const minutes = Math.max(1, Math.round((intro.dueAt - Date.now()) / 60_000));
+      setWhen(minutes > 90 ? `${Math.round(minutes / 60)}시간` : `${minutes}분`);
+    };
+    update();
+    const interval = window.setInterval(update, 30_000);
+    return () => window.clearInterval(interval);
+  }, [intro.dueAt]);
+
+  return (
+    <div className="intro-pending" role="status">
+      <span aria-hidden="true">👋</span>
+      <div>
+        <strong>새로운 친구가 곧 말을 걸 거예요</strong>
+        <small>{when ? `${when} 뒤쯤 첫 메시지가 도착해요` : "곧 첫 메시지가 도착해요"}</small>
+      </div>
     </div>
   );
 }
 
-function GoalRow({ done, label }: { done: boolean; label: string }) {
+function AppLoading() {
   return (
-    <div className="flex items-center gap-2.5">
-      <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[11px] ${done ? "bg-emerald-500" : "bg-white/10"}`}>
-        {done ? "✓" : ""}
-      </span>
-      <span className={`text-sm ${done ? "text-white/40 line-through" : "text-white/80"}`}>{label}</span>
+    <div className="min-h-dvh grid place-items-center">
+      <div className="apple-loader" role="status" aria-label="불러오는 중" />
     </div>
+  );
+}
+
+function LoadError({ onRetry }: { onRetry: () => void }) {
+  return (
+    <main className="grid min-h-dvh place-items-center px-6 text-white">
+      <div className="w-full max-w-xs text-center">
+        <div className="text-[42px]" aria-hidden="true">↻</div>
+        <h1 className="mt-3 text-[19px] font-semibold">목록을 불러오지 못했어요</h1>
+        <p className="mt-2 text-[13px] leading-relaxed text-white/48">연결을 확인한 뒤 다시 시도해 주세요.</p>
+        <button
+          type="button"
+          onClick={onRetry}
+          className="apple-primary-button mt-5 min-h-12 w-full rounded-2xl bg-[var(--apple-blue)] text-[14px] font-semibold"
+        >
+          다시 시도
+        </button>
+      </div>
+    </main>
+  );
+}
+
+function PersonIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4.5 20c.4-4.3 3.4-6.5 7.5-6.5s7.1 2.2 7.5 6.5" />
+    </svg>
+  );
+}
+
+function ChevronIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg className={`coach-chevron ${className}`} viewBox="0 0 20 20" aria-hidden="true">
+      <path d="m5.5 7.5 4.5 5 4.5-5" />
+    </svg>
   );
 }

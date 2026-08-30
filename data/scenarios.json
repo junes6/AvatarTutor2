@@ -7,7 +7,30 @@
     "ambience": "/scenes/cafe-ambience.wav",
     "tutorRole": "카페 바리스타",
     "learnerRole": "주문하러 온 손님",
-    "descriptionKo": "아늑한 카페에서 음료를 주문하고 가벼운 대화를 나눠보세요."
+    "descriptionKo": "아늑한 카페에 들어와 바리스타와 마주한 상황입니다.",
+    "goalKo": "원하는 음료와 옵션을 말하고, 매장/포장 여부에 답한 뒤 결제하기",
+    "conversationFlow": [
+      "음료 주문 받기",
+      "사이즈나 옵션 하나 확인하기",
+      "매장/포장 여부 확인하기",
+      "주문을 요약하고 결제 안내하기"
+    ],
+    "openingLine": "Hi! Welcome in. What can I get started for you?",
+    "keyExpressions": [
+      {
+        "en": "Can I get a medium iced americano?",
+        "ko": "아이스 아메리카노 미디엄으로 주세요."
+      },
+      {
+        "en": "For here, please.",
+        "ko": "여기서 마실게요."
+      },
+      {
+        "en": "Could I get that with oat milk?",
+        "ko": "오트밀크로 바꿔주실 수 있나요?"
+      }
+    ],
+    "locked": false
   },
   {
     "id": "airport",
@@ -17,7 +40,30 @@
     "ambience": "/scenes/airport-ambience.wav",
     "tutorRole": "체크인 카운터 직원",
     "learnerRole": "탑승 수속하는 여행객",
-    "descriptionKo": "체크인, 수하물, 게이트 안내까지 — 공항에서 살아남기."
+    "descriptionKo": "출국장 체크인 카운터에서 탑승 수속을 시작하는 상황입니다.",
+    "goalKo": "목적지와 예약 정보를 말하고, 수하물을 부친 뒤 게이트 안내 확인하기",
+    "conversationFlow": [
+      "여권과 목적지 확인하기",
+      "위탁 수하물 개수와 무게 확인하기",
+      "좌석 요청 확인하기",
+      "탑승권과 게이트 안내하기"
+    ],
+    "openingLine": "Good morning. May I see your passport, please?",
+    "keyExpressions": [
+      {
+        "en": "I'd like to check in for my flight to Sydney.",
+        "ko": "시드니행 비행기 체크인하려고요."
+      },
+      {
+        "en": "Just one checked bag, please.",
+        "ko": "부칠 짐은 하나예요."
+      },
+      {
+        "en": "Could I have a window seat?",
+        "ko": "창가 자리로 주실 수 있나요?"
+      }
+    ],
+    "locked": false
   },
   {
     "id": "hotel",
@@ -27,7 +73,30 @@
     "ambience": "/scenes/hotel-ambience.wav",
     "tutorRole": "호텔 프런트 직원",
     "learnerRole": "체크인하는 투숙객",
-    "descriptionKo": "체크인부터 룸서비스 요청, 컴플레인까지 호텔 영어 연습."
+    "descriptionKo": "예약한 호텔 프런트에서 체크인을 요청하는 상황입니다.",
+    "goalKo": "예약자 이름을 말하고 체크인한 뒤, 필요한 호텔 정보를 한 가지 확인하기",
+    "conversationFlow": [
+      "예약자 이름 확인하기",
+      "숙박 기간과 객실 확인하기",
+      "조식·와이파이·체크아웃 중 필요한 정보 안내하기",
+      "객실 키 전달하기"
+    ],
+    "openingLine": "Welcome to the hotel. Do you have a reservation with us?",
+    "keyExpressions": [
+      {
+        "en": "I have a reservation under Kim.",
+        "ko": "김으로 예약했어요."
+      },
+      {
+        "en": "What time is checkout?",
+        "ko": "체크아웃은 몇 시인가요?"
+      },
+      {
+        "en": "Could I get a late checkout?",
+        "ko": "체크아웃을 좀 늦출 수 있을까요?"
+      }
+    ],
+    "locked": false
   },
   {
     "id": "restaurant",
@@ -37,7 +106,30 @@
     "ambience": "/scenes/restaurant-ambience.wav",
     "tutorRole": "레스토랑 서버",
     "learnerRole": "식사하러 온 손님",
-    "descriptionKo": "메뉴 추천 받기, 주문, 계산까지 레스토랑 풀코스."
+    "descriptionKo": "현지 레스토랑에 앉아 서버에게 메뉴를 주문하는 상황입니다.",
+    "goalKo": "추천을 묻고 음식과 음료를 주문한 뒤 계산 요청하기",
+    "conversationFlow": [
+      "메뉴와 오늘의 추천 안내하기",
+      "음식 주문 받기",
+      "추가 요청이나 알레르기 확인하기",
+      "식사 후 계산 안내하기"
+    ],
+    "openingLine": "Hi there. Are you ready to order, or would you like a recommendation?",
+    "keyExpressions": [
+      {
+        "en": "Could we see the menu, please?",
+        "ko": "메뉴판 좀 볼 수 있을까요?"
+      },
+      {
+        "en": "What do you recommend?",
+        "ko": "뭐가 맛있어요?"
+      },
+      {
+        "en": "Could I get the check, please?",
+        "ko": "계산서 주시겠어요?"
+      }
+    ],
+    "locked": false
   },
   {
     "id": "interview",
@@ -47,7 +139,30 @@
     "ambience": "/scenes/interview-ambience.wav",
     "tutorRole": "면접관",
     "learnerRole": "지원자",
-    "descriptionKo": "자기소개, 강점과 약점, 지원 동기 — 영어 면접 실전 연습."
+    "descriptionKo": "지원한 회사의 면접실에서 첫 영어 면접을 시작하는 상황입니다.",
+    "goalKo": "짧게 자기소개하고, 경험·강점·지원 동기를 구체적인 예와 함께 답하기",
+    "conversationFlow": [
+      "자기소개 요청하기",
+      "관련 경험 한 가지 질문하기",
+      "강점 또는 문제 해결 사례 질문하기",
+      "지원 동기와 지원자의 질문으로 마무리하기"
+    ],
+    "openingLine": "Thanks for coming in today. Could you start by telling me a little about yourself?",
+    "keyExpressions": [
+      {
+        "en": "Thanks for having me today.",
+        "ko": "오늘 시간 내주셔서 감사합니다."
+      },
+      {
+        "en": "I worked on that project for two years.",
+        "ko": "그 프로젝트를 2년간 맡았습니다."
+      },
+      {
+        "en": "Could you tell me more about the team?",
+        "ko": "팀에 대해 조금 더 말씀해 주실 수 있나요?"
+      }
+    ],
+    "locked": false
   },
   {
     "id": "date",
@@ -56,7 +171,30 @@
     "image": "/scenes/date.svg",
     "tutorRole": "소개팅 상대",
     "learnerRole": "소개팅에 나간 사람",
-    "descriptionKo": "설레는 첫 데이트. 자연스럽게 서로를 알아가는 대화 연습."
+    "descriptionKo": "조용한 카페에서 소개팅 상대를 처음 만난 상황입니다.",
+    "goalKo": "서로 인사하고 취미와 일상을 나누며 공통 관심사 하나 찾기",
+    "conversationFlow": [
+      "가벼운 첫인사 나누기",
+      "요즘 즐기는 취미 이야기하기",
+      "공통 관심사 더 알아보기",
+      "부담 없는 다음 약속 제안으로 마무리하기"
+    ],
+    "openingLine": "Hi, it's really nice to meet you. Was it easy to find this place?",
+    "keyExpressions": [
+      {
+        "en": "You look great tonight.",
+        "ko": "오늘 정말 멋져 보여요."
+      },
+      {
+        "en": "How was your week?",
+        "ko": "이번 주는 어땠어요?"
+      },
+      {
+        "en": "Do you want to grab dessert after this?",
+        "ko": "이거 끝나고 디저트 먹으러 갈래요?"
+      }
+    ],
+    "locked": false
   },
   {
     "id": "hospital",
@@ -65,7 +203,30 @@
     "image": "/scenes/hospital.svg",
     "tutorRole": "의사",
     "learnerRole": "증상을 설명하러 온 환자",
-    "descriptionKo": "아픈 곳 설명하기, 처방 이해하기 — 해외에서 병원 가기."
+    "descriptionKo": "해외 병원 진료실에서 의사에게 증상을 설명하는 상황입니다.",
+    "goalKo": "아픈 부위·증상·시작 시점을 말하고 기본 진료 안내 이해하기",
+    "conversationFlow": [
+      "가장 불편한 증상 묻기",
+      "언제 시작됐는지 확인하기",
+      "통증 정도와 동반 증상 확인하기",
+      "일반적인 주의사항과 다음 조치 안내하기"
+    ],
+    "openingLine": "Hello. What seems to be the problem today?",
+    "keyExpressions": [
+      {
+        "en": "I've had a sore throat for three days.",
+        "ko": "목이 아픈 지 3일 됐어요."
+      },
+      {
+        "en": "It hurts when I swallow.",
+        "ko": "삼킬 때 아파요."
+      },
+      {
+        "en": "Do I need a prescription?",
+        "ko": "처방전이 필요한가요?"
+      }
+    ],
+    "locked": false
   },
   {
     "id": "shopping",
@@ -74,6 +235,29 @@
     "image": "/scenes/shopping.svg",
     "tutorRole": "옷가게 점원",
     "learnerRole": "쇼핑하는 손님",
-    "descriptionKo": "사이즈 문의, 교환·환불, 가격 흥정까지 쇼핑 영어."
+    "descriptionKo": "옷가게에서 마음에 드는 옷을 발견해 점원에게 도움을 요청하는 상황입니다.",
+    "goalKo": "원하는 색상·사이즈를 묻고 입어본 뒤 구매 또는 교환 여부 결정하기",
+    "conversationFlow": [
+      "찾는 상품이나 스타일 확인하기",
+      "색상과 사이즈 안내하기",
+      "피팅룸 안내와 착용감 확인하기",
+      "구매·교환·환불 정보 안내하기"
+    ],
+    "openingLine": "Hi! Let me know what you're looking for, and I'll help you find it.",
+    "keyExpressions": [
+      {
+        "en": "Do you have this in a medium?",
+        "ko": "이거 미디엄 사이즈 있나요?"
+      },
+      {
+        "en": "Can I try this on?",
+        "ko": "입어봐도 될까요?"
+      },
+      {
+        "en": "Do you take card?",
+        "ko": "카드 되나요?"
+      }
+    ],
+    "locked": false
   }
 ]

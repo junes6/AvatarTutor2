@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky-forest" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#064e3b"/>
+      <stop offset="0.5" stop-color="#047857"/>
+      <stop offset="1" stop-color="#a7f3d0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#sky-forest)"/>
+  
+  <g fill="#022c22" opacity="0.9">
+    <path d="M60 880 L115 880 L87 320 Z"/><path d="M195 880 L250 880 L222 320 Z"/><path d="M330 880 L385 880 L357 320 Z"/><path d="M465 880 L520 880 L492 320 Z"/><path d="M600 880 L655 880 L627 320 Z"/><path d="M735 880 L790 880 L762 320 Z"/><path d="M870 880 L925 880 L897 320 Z"/><path d="M1005 880 L1060 880 L1032 320 Z"/><path d="M1140 880 L1195 880 L1167 320 Z"/>
+  </g>
+  <rect x="0" y="860" width="1200" height="40" fill="#065f46"/>
+  <g stroke="#d1fae5" stroke-width="6" opacity="0.35">
+    <line x1="200" y1="0" x2="420" y2="900"/><line x1="700" y1="0" x2="900" y2="900"/>
+  </g>
+</svg>

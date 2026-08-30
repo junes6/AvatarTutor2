@@ -3,52 +3,80 @@
 // 표현 카드 · 교정 카드 · "이렇게 말해보세요" 카드
 
 import { useState } from "react";
-import { fetchTTS } from "@/hooks/useAudioPlayer";
+import { useAudioPlayer } from "@/hooks/useAudioPlayer";
 import type { CorrectionCard, SuggestionCard, Expression } from "@/core/types";
 
 function ListenButton({ text, tutorId, speed = 1.0 }: { text: string; tutorId: string; speed?: number }) {
-  const [loading, setLoading] = useState(false);
-  const play = async (rate: number) => {
-    if (loading) return;
-    setLoading(true);
-    const audio = await fetchTTS(text, tutorId);
-    setLoading(false);
-    if (audio) {
-      const el = new Audio(`data:${audio.mime};base64,${audio.audioBase64}`);
-      el.playbackRate = rate;
-      el.play().catch(() => {});
-    } else if (window.speechSynthesis) {
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = "en-US";
-      u.rate = rate;
-      window.speechSynthesis.speak(u);
+  const player = useAudioPlayer(tutorId);
+  const [activeRate, setActiveRate] = useState<number | null>(null);
+  const busy = player.phase !== "idle";
+
+  const play = (rate: number) => {
+    if (busy) {
+      if (activeRate === rate) player.stop();
+      return;
     }
+    setActiveRate(rate);
+    void player.playTTS(text, { rate });
   };
+
+  const labelFor = (rate: number, idleLabel: string) => {
+    const active = busy && activeRate === rate;
+    if (!active) return idleLabel;
+    return player.phase === "loading" ? "…" : "중지";
+  };
+
   return (
-    <div className="flex gap-1.5">
-      <button onClick={() => play(speed)} className="px-2.5 py-1 rounded-full bg-white/10 text-xs hover:bg-white/20 transition-colors">
-        {loading ? "…" : "🔊 듣기"}
+    <div className="call-coach-listen-actions">
+      <button
+        type="button"
+        onClick={() => play(speed)}
+        disabled={busy && activeRate !== speed}
+        className="coach-listen-button"
+        aria-label={`${text} 듣기`}
+        aria-pressed={busy && activeRate === speed}
+      >
+        <SpeakerIcon />
+        {labelFor(speed, "듣기")}
       </button>
-      <button onClick={() => play(0.7)} className="px-2.5 py-1 rounded-full bg-white/10 text-xs hover:bg-white/20 transition-colors">
-        0.7×
+      <button
+        type="button"
+        onClick={() => play(0.7)}
+        disabled={busy && activeRate !== 0.7}
+        className="coach-listen-button"
+        aria-label={`${text} 천천히 듣기`}
+        aria-pressed={busy && activeRate === 0.7}
+      >
+        <SpeakerIcon />
+        {labelFor(0.7, "천천히")}
       </button>
     </div>
+  );
+}
+
+function SpeakerIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M5 10v4h3l4 3V7L8 10H5Z" />
+      <path d="M15 9.5a4 4 0 0 1 0 5M17.5 7a7.2 7.2 0 0 1 0 10" />
+    </svg>
   );
 }
 
 /** 러닝모드: 새 표현 소개 카드 */
 export function ExpressionCardView({ expr, tutorId }: { expr: Expression; tutorId: string }) {
   return (
-    <div className="rounded-2xl bg-indigo-500/15 border border-indigo-400/40 p-4 backdrop-blur-md animate-[slideUp_0.35s_ease]">
-      <div className="text-[11px] font-semibold text-indigo-300 mb-1">✨ 새 표현</div>
-      <div className="text-lg font-bold text-white">{expr.en}</div>
-      <div className="text-sm text-white/70 mt-0.5">{expr.ko}</div>
-      <div className="mt-2 text-xs text-white/50 italic">
+    <div className="call-coach-card is-expression">
+      <div className="call-coach-label">새 표현</div>
+      <div className="call-coach-title">{expr.en}</div>
+      <div className="call-coach-ko">{expr.ko}</div>
+      <div className="call-coach-example italic">
         {expr.example}
         <div className="not-italic">{expr.exampleKo}</div>
       </div>
-      <div className="mt-3">
+      <div className="call-coach-actions">
         <ListenButton text={expr.en} tutorId={tutorId} />
+        <span className="call-coach-prompt">듣고 소리 내어 따라 해보세요</span>
       </div>
     </div>
   );
@@ -57,13 +85,13 @@ export function ExpressionCardView({ expr, tutorId }: { expr: Expression; tutorI
 /** "이렇게 말하면 더 자연스러워요" — 따라 말하기 카드 */
 export function SuggestionCardView({ card, tutorId }: { card: SuggestionCard; tutorId: string }) {
   return (
-    <div className="rounded-2xl bg-emerald-500/15 border border-emerald-400/40 p-4 backdrop-blur-md animate-[slideUp_0.35s_ease]">
-      <div className="text-[11px] font-semibold text-emerald-300 mb-1">💬 이렇게 말해보세요</div>
-      <div className="text-lg font-bold text-white">{card.en}</div>
-      {card.ko && <div className="text-sm text-white/70 mt-0.5">{card.ko}</div>}
-      <div className="mt-3 flex items-center justify-between">
+    <div className="call-coach-card is-suggestion">
+      <div className="call-coach-label">이렇게 말해보세요</div>
+      <div className="call-coach-title">{card.en}</div>
+      {card.ko && <div className="call-coach-ko">{card.ko}</div>}
+      <div className="call-coach-actions">
         <ListenButton text={card.en} tutorId={tutorId} />
-        <span className="text-[11px] text-emerald-300/80">🎤 버튼을 누르고 따라 말해보세요</span>
+        <span className="call-coach-prompt">마이크를 눌러 따라 말하기</span>
       </div>
     </div>
   );
@@ -81,14 +109,15 @@ export function CorrectionCardView({ card, tutorId }: { card: CorrectionCard; tu
     "word-choice": "단어 선택",
   };
   return (
-    <div className="rounded-2xl bg-amber-500/15 border border-amber-400/40 p-4 backdrop-blur-md animate-[slideUp_0.35s_ease]">
-      <div className="text-[11px] font-semibold text-amber-300 mb-1.5">✏️ {typeLabel[card.type] ?? "교정"}</div>
-      <div className="text-sm text-white/50 line-through">{card.original}</div>
-      <div className="text-base font-bold text-white mt-1">{card.better}</div>
-      {card.ko && <div className="text-sm text-white/70 mt-0.5">{card.ko}</div>}
-      {card.reason && <div className="mt-2 text-xs text-amber-200/90">💡 {card.reason}</div>}
-      <div className="mt-3">
+    <div className="call-coach-card is-correction">
+      <div className="call-coach-label">{typeLabel[card.type] ?? "표현"} 다듬기</div>
+      <div className="call-coach-original">{card.original}</div>
+      <div className="call-coach-title">{card.better}</div>
+      {card.ko && <div className="call-coach-ko">{card.ko}</div>}
+      {card.reason && <div className="call-coach-reason">{card.reason}</div>}
+      <div className="call-coach-actions">
         <ListenButton text={card.better} tutorId={tutorId} />
+        <span className="call-coach-prompt">자연스러운 문장을 다시 들어보세요</span>
       </div>
     </div>
   );
@@ -98,26 +127,33 @@ export function CorrectionCardView({ card, tutorId }: { card: CorrectionCard; tu
 export function FlipCard({ card, tutorId }: { card: CorrectionCard; tutorId: string }) {
   const [flipped, setFlipped] = useState(false);
   return (
-    <button
-      onClick={() => setFlipped((f) => !f)}
-      className="w-full text-left rounded-2xl border p-4 transition-all duration-300 bg-white/5 border-white/10 hover:border-white/25"
-    >
-      {!flipped ? (
-        <>
-          <div className="text-[11px] text-white/40 mb-1">내가 한 말 (탭해서 교정문 보기)</div>
-          <div className="text-base text-white/80">{card.original}</div>
-        </>
-      ) : (
-        <>
-          <div className="text-[11px] text-emerald-300 mb-1">더 자연스러운 표현</div>
-          <div className="text-base font-bold text-white">{card.better}</div>
-          <div className="text-sm text-white/60 mt-0.5">{card.ko}</div>
-          {card.reason && <div className="mt-1.5 text-xs text-amber-200/90">💡 {card.reason}</div>}
-          <div className="mt-2" onClick={(e) => e.stopPropagation()}>
-            <ListenButton text={card.better} tutorId={tutorId} />
-          </div>
-        </>
+    <div className="w-full overflow-hidden rounded-2xl border border-white/10 bg-white/5 transition-all duration-300 hover:border-white/25">
+      <button
+        type="button"
+        onClick={() => setFlipped((value) => !value)}
+        className="w-full p-4 text-left"
+        aria-expanded={flipped}
+        aria-label={flipped ? "내가 한 말 보기" : "더 자연스러운 표현 보기"}
+      >
+        {!flipped ? (
+          <>
+            <div className="mb-1 text-[11px] text-white/40">내가 한 말 · 눌러서 교정 보기</div>
+            <div className="text-base text-white/80">{card.original}</div>
+          </>
+        ) : (
+          <>
+            <div className="mb-1 text-[11px] text-emerald-300">더 자연스러운 표현 · 눌러서 원문 보기</div>
+            <div className="text-base font-bold text-white">{card.better}</div>
+            <div className="mt-0.5 text-sm text-white/60">{card.ko}</div>
+            {card.reason && <div className="mt-1.5 text-xs text-amber-200/90">💡 {card.reason}</div>}
+          </>
+        )}
+      </button>
+      {flipped && (
+        <div className="-mt-1 px-4 pb-4">
+          <ListenButton text={card.better} tutorId={tutorId} />
+        </div>
       )}
-    </button>
+    </div>
   );
 }

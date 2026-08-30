@@ -15,6 +15,7 @@ export async function subscribePush(): Promise<boolean> {
   try {
     if (!("serviceWorker" in navigator) || !("PushManager" in window)) return false;
     const keyRes = await fetch("/api/push");
+    if (!keyRes.ok) return false;
     const { publicKey } = await keyRes.json();
     if (!publicKey) return false;
     const permission = await Notification.requestPermission();
@@ -24,12 +25,12 @@ export async function subscribePush(): Promise<boolean> {
       userVisibleOnly: true,
       applicationServerKey: urlBase64ToUint8Array(publicKey) as unknown as BufferSource,
     });
-    await fetch("/api/push", {
+    const saveResponse = await fetch("/api/push", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(sub.toJSON()),
     });
-    return true;
+    return saveResponse.ok;
   } catch {
     return false;
   }

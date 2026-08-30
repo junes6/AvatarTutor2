@@ -1,143 +1,280 @@
 "use client";
 
-// 푸시투토크 버튼 — 누르는 동안 녹음(파형 표시), 떼면 전송, 위로 슬라이드하면 취소.
-// 튜터가 말하는 중에는 비활성 표시되지만 탭하면 즉시 튜터 음성을 멈추고 내 차례로.
+// 길게 눌러 말하기 — 실시간 음량/문장 확인, 위로 밀어 취소, 튜터 발화 즉시 끊기.
 
-import { useRef, useState } from "react";
-import { useRecorder, type RecorderResult } from "@/hooks/useRecorder";
+import { useEffect, useRef, useState, type KeyboardEvent, type MouseEvent, type PointerEvent } from "react";
+import {
+  canStartRecording,
+  useRecorder,
+  type RecorderError,
+  type RecorderPhase,
+  type RecorderResult,
+} from "@/hooks/useRecorder";
+import { stopGlobalAudioPlayback } from "@/hooks/useAudioPlayer";
 
-const CANCEL_DISTANCE = 80;
+const CANCEL_DISTANCE = 72;
 
 interface Props {
-  onResult: (r: RecorderResult) => void;
-  onInterrupt?: () => void; // 튜터 말 끊기
+  onResult: (result: RecorderResult) => void;
+  onEmpty?: () => void;
+  onInterrupt?: () => void;
+  onRecordingChange?: (recording: boolean) => void;
+  onPhaseChange?: (phase: RecorderPhase) => void;
+  onTranscriptChange?: (transcript: string) => void;
+  onUnavailable?: (error: RecorderError) => void;
+  /** 현재 녹음을 끊지 않고, 다음 녹음부터 적용할 Web Speech API 언어. */
+  recognitionLanguage?: string;
   tutorSpeaking: boolean;
-  busy: boolean; // 서버 처리 중
+  busy: boolean;
 }
 
-export default function PushToTalkButton({ onResult, onInterrupt, tutorSpeaking, busy }: Props) {
-  const { start, stop, cancel, isRecording, level } = useRecorder();
+export default function PushToTalkButton({
+  onResult,
+  onEmpty,
+  onInterrupt,
+  onRecordingChange,
+  onPhaseChange,
+  onTranscriptChange,
+  onUnavailable,
+  recognitionLanguage = "en-US",
+  tutorSpeaking,
+  busy,
+}: Props) {
+  const {
+    start,
+    stop,
+    cancel,
+    phase,
+    level,
+    liveTranscript,
+    hasDetectedSpeech,
+    isSpeechRecognitionSupported,
+    error,
+  } = useRecorder({ language: recognitionLanguage });
   const [inCancelZone, setInCancelZone] = useState(false);
+  const inCancelZoneRef = useRef(false);
   const startYRef = useRef(0);
   const activeRef = useRef(false);
+  const keyboardRef = useRef(false);
+  const reportedErrorRef = useRef<RecorderError | null>(null);
 
-  const handleDown = async (e: React.PointerEvent) => {
-    if (busy) return;
-    if (tutorSpeaking) {
-      onInterrupt?.();
+  const isRecording = phase === "requesting" || phase === "recording" || phase === "finalizing";
+  const isCapturing = phase === "recording";
+  const isInputLocked = busy || phase === "finalizing";
+  const isNativeDisabled = busy || phase === "finalizing";
+
+  useEffect(() => {
+    onRecordingChange?.(isRecording);
+  }, [isRecording, onRecordingChange]);
+
+  useEffect(() => {
+    onPhaseChange?.(phase);
+  }, [phase, onPhaseChange]);
+
+  useEffect(() => {
+    onTranscriptChange?.(liveTranscript);
+  }, [liveTranscript, onTranscriptChange]);
+
+  useEffect(() => {
+    if (!error) {
+      reportedErrorRef.current = null;
       return;
     }
-    e.currentTarget.setPointerCapture(e.pointerId);
-    startYRef.current = e.clientY;
+    if (reportedErrorRef.current === error) return;
+    reportedErrorRef.current = error;
+    onUnavailable?.(error);
+  }, [error, onUnavailable]);
+
+  const begin = async () => {
+    if (busy || activeRef.current || !canStartRecording(phase)) return;
+    if (tutorSpeaking) onInterrupt?.();
+    // 카드/힌트/스크립트 음성도 마이크에 다시 들어가지 않도록 모두 정리한다.
+    stopGlobalAudioPlayback();
+    inCancelZoneRef.current = false;
     setInCancelZone(false);
     activeRef.current = true;
-    const ok = await start();
-    if (!ok) {
-      activeRef.current = false;
-      alert("마이크 권한이 필요해요. 브라우저 설정에서 허용해 주세요.");
-    }
+    const started = await start();
+    if (!started) activeRef.current = false;
   };
 
-  const handleMove = (e: React.PointerEvent) => {
-    if (!activeRef.current) return;
-    setInCancelZone(startYRef.current - e.clientY > CANCEL_DISTANCE);
-  };
-
-  const handleUp = async () => {
+  const finish = async () => {
     if (!activeRef.current) return;
     activeRef.current = false;
-    if (inCancelZone) {
+    if (inCancelZoneRef.current) {
       cancel();
+      onTranscriptChange?.("");
+      inCancelZoneRef.current = false;
       setInCancelZone(false);
       return;
     }
+    const completedRecording = phase === "recording";
     const result = await stop();
+    inCancelZoneRef.current = false;
     setInCancelZone(false);
     if (result) onResult(result);
+    else if (completedRecording) onEmpty?.();
   };
 
-  const size = isRecording ? 96 + level * 28 : 80;
-  const disabled = busy;
-  const showInterrupt = tutorSpeaking && !isRecording;
+  const handlePointerDown = (event: PointerEvent<HTMLButtonElement>) => {
+    if (busy || activeRef.current || !canStartRecording(phase)) return;
+    event.preventDefault();
+    event.currentTarget.setPointerCapture(event.pointerId);
+    startYRef.current = event.clientY;
+    void begin();
+  };
+
+  const handlePointerMove = (event: PointerEvent<HTMLButtonElement>) => {
+    if (!activeRef.current) return;
+    const shouldCancel = startYRef.current - event.clientY > CANCEL_DISTANCE;
+    inCancelZoneRef.current = shouldCancel;
+    setInCancelZone(shouldCancel);
+  };
+
+  const handlePointerCancel = () => {
+    if (!activeRef.current) return;
+    activeRef.current = false;
+    cancel();
+    onTranscriptChange?.("");
+    inCancelZoneRef.current = false;
+    setInCancelZone(false);
+  };
+
+  const handleAssistiveClick = (event: MouseEvent<HTMLButtonElement>) => {
+    // VoiceOver/TalkBack activates controls with a synthesized click and no
+    // pointerdown/up pair. Treat that path as a start/stop toggle.
+    if (event.detail !== 0 || busy || isInputLocked) return;
+    event.preventDefault();
+    if (activeRef.current) void finish();
+    else void begin();
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+    if (
+      (event.key !== " " && event.key !== "Enter") ||
+      event.repeat ||
+      busy ||
+      activeRef.current ||
+      !canStartRecording(phase)
+    ) return;
+    event.preventDefault();
+    keyboardRef.current = true;
+    void begin();
+  };
+
+  const handleKeyUp = (event: KeyboardEvent<HTMLButtonElement>) => {
+    if ((event.key !== " " && event.key !== "Enter") || !keyboardRef.current) return;
+    event.preventDefault();
+    keyboardRef.current = false;
+    void finish();
+  };
+
+  const statusText = error?.message
+    ?? (busy
+      ? "답변을 준비하는 중"
+      : phase === "requesting"
+      ? "마이크 연결 중 · 놓으면 취소"
+      : phase === "finalizing"
+        ? "말을 확인하는 중"
+        : phase === "recording"
+          ? inCancelZone
+            ? "놓으면 취소"
+            : hasDetectedSpeech
+              ? "잘 듣고 있어요"
+              : "말해 주세요"
+          : tutorSpeaking
+            ? "눌러서 끊고 말하기"
+             : "누르고 말하기");
+  const actionLabel = phase === "requesting"
+    ? "마이크 연결 취소"
+    : phase === "recording"
+      ? inCancelZone
+        ? "녹음 취소"
+        : "말하기 마치기"
+      : phase === "finalizing"
+        ? "말하기 처리 중"
+        : busy
+          ? "답변 준비 중"
+          : tutorSpeaking
+            ? "튜터 말을 끊고 말하기"
+            : "말하기 시작";
 
   return (
-    <div className="relative flex flex-col items-center select-none touch-none">
-      {isRecording && (
-        <div
-          className={`absolute -top-12 text-sm font-medium px-3 py-1 rounded-full transition-colors ${
-            inCancelZone ? "bg-red-500 text-white" : "bg-white/10 text-white/70"
-          }`}
-        >
-          {inCancelZone ? "놓으면 취소돼요" : "↑ 위로 밀면 취소"}
+    <div className="ptt-wrap">
+      {phase === "recording" && (
+        <div className={`ptt-cancel-hint ${inCancelZone ? "is-cancel" : ""}`} role="status">
+          <ArrowUpIcon /> {inCancelZone ? "이제 놓으면 취소돼요" : "위로 밀면 취소"}
         </div>
       )}
-      {/* 파형 링 */}
-      {isRecording && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div
-            className="rounded-full border-2 border-emerald-400/60 animate-ping"
-            style={{ width: size + 30, height: size + 30 }}
-          />
-        </div>
-      )}
+
       <button
-        onPointerDown={handleDown}
-        onPointerMove={handleMove}
-        onPointerUp={handleUp}
-        onPointerCancel={handleUp}
-        onContextMenu={(e) => e.preventDefault()}
-        disabled={disabled}
-        className={`relative rounded-full flex items-center justify-center transition-all duration-100 shadow-xl ${
-          isRecording
-            ? inCancelZone
-              ? "bg-red-500"
-              : "bg-emerald-500"
-            : showInterrupt
-              ? "bg-white/15 backdrop-blur"
-              : busy
-                ? "bg-white/10"
-                : "bg-emerald-600 active:bg-emerald-500"
-        }`}
-        style={{ width: size, height: size }}
-        aria-label={isRecording ? "녹음 중 — 놓으면 전송" : "누르고 말하기"}
+        type="button"
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={() => void finish()}
+        onPointerCancel={handlePointerCancel}
+        onClick={handleAssistiveClick}
+        onKeyDown={handleKeyDown}
+        onKeyUp={handleKeyUp}
+        onBlur={() => {
+          if (keyboardRef.current) {
+            keyboardRef.current = false;
+            void finish();
+          }
+        }}
+        onContextMenu={(event) => event.preventDefault()}
+        disabled={isNativeDisabled}
+        aria-disabled={isInputLocked}
+        className={`ptt-button ${isCapturing ? "is-recording" : ""} ${isInputLocked ? "is-disabled" : ""} ${inCancelZone ? "is-cancel" : ""} ${tutorSpeaking ? "can-interrupt" : ""}`}
+        style={{ "--voice-level": Math.max(0.05, level) } as React.CSSProperties}
+        aria-label={actionLabel}
+        aria-pressed={isCapturing}
+        aria-busy={phase === "requesting" || phase === "finalizing"}
+        aria-describedby="ptt-status"
       >
-        {busy ? (
-          <div className="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin" />
-        ) : isRecording ? (
-          <WaveBars level={level} />
-        ) : showInterrupt ? (
-          <span className="text-2xl">✋</span>
-        ) : (
-          <MicIcon />
-        )}
+        <span className="ptt-aura" aria-hidden="true" />
+        <span className="ptt-face">
+          {busy || phase === "requesting" || phase === "finalizing" ? <SpinnerIcon /> : isRecording ? <WaveBars level={level} /> : <MicIcon />}
+        </span>
       </button>
-      <div className="mt-2 text-xs text-white/50 h-4">
-        {busy ? "생각 중..." : isRecording ? "듣고 있어요" : showInterrupt ? "탭하면 내 차례" : "누르고 말하기"}
-      </div>
+
+      <span id="ptt-status" className={`ptt-status ${error ? "is-error" : ""}`}>
+        {statusText}
+      </span>
+      {!isSpeechRecognitionSupported && phase === "recording" && (
+        <span className="sr-only">실시간 글자 표시는 통화 후 확정됩니다.</span>
+      )}
     </div>
   );
 }
 
 function WaveBars({ level }: { level: number }) {
-  const bars = [0.4, 0.8, 1.0, 0.7, 0.5];
+  const heights = [0.46, 0.8, 1, 0.7, 0.42];
   return (
-    <div className="flex items-center gap-1 h-8">
-      {bars.map((b, i) => (
-        <div
-          key={i}
-          className="w-1.5 bg-white rounded-full transition-all duration-75"
-          style={{ height: 6 + b * level * 26 + (isFinite(level) ? Math.random() * level * 6 : 0) }}
-        />
+    <span className="ptt-wave" aria-hidden="true">
+      {heights.map((height, index) => (
+        <i key={index} style={{ height: `${8 + height * Math.max(0.12, level) * 25}px` }} />
       ))}
-    </div>
+    </span>
   );
 }
 
 function MicIcon() {
   return (
-    <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
-      <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z" />
-      <path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 0 8 8.94V22h2v-2.06A9 9 0 0 0 21 11h-2z" />
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="9" y="3" width="6" height="11" rx="3" />
+      <path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6" />
     </svg>
   );
+}
+
+function ArrowUpIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="m6 10 6-6 6 6M12 4v16" />
+    </svg>
+  );
+}
+
+function SpinnerIcon() {
+  return <span className="ptt-spinner" aria-hidden="true" />;
 }

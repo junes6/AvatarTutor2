@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky-mountain" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#312e81"/>
+      <stop offset="0.5" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#c7d2fe"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#sky-mountain)"/>
+  
+  <path d="M0 900 L280 380 L470 640 L680 300 L960 900 Z" fill="#1e1b4b" opacity="0.9"/>
+  <path d="M600 900 L900 420 L1200 900 Z" fill="#312e81" opacity="0.95"/>
+  <path d="M240 430 L280 380 L330 430 L300 445 L265 425 Z" fill="#f8fafc"/>
+  <path d="M860 470 L900 420 L945 470 L905 485 Z" fill="#f8fafc"/>
+  <ellipse cx="1000" cy="200" r="0" /><circle cx="1000" cy="200" r="52" fill="#fef3c7" opacity="0.85"/>
+</svg>

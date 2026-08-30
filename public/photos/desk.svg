@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky-desk" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="0.5" stop-color="#1e293b"/>
+      <stop offset="1" stop-color="#334155"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#sky-desk)"/>
+  
+  <rect x="0" y="640" width="1200" height="260" fill="#0b1220"/>
+  <rect x="200" y="260" width="480" height="320" rx="16" fill="#111827" stroke="#334155" stroke-width="8"/>
+  <rect x="230" y="290" width="420" height="260" rx="8" fill="#1d4ed8" opacity="0.55"/>
+  <g fill="#22d3ee" opacity="0.8">
+    <rect x="250" y="310" width="90" height="7" rx="3"/><rect x="250" y="329" width="147" height="7" rx="3"/><rect x="250" y="348" width="204" height="7" rx="3"/><rect x="250" y="367" width="261" height="7" rx="3"/><rect x="250" y="386" width="318" height="7" rx="3"/><rect x="250" y="405" width="375" height="7" rx="3"/><rect x="250" y="424" width="132" height="7" rx="3"/><rect x="250" y="443" width="189" height="7" rx="3"/><rect x="250" y="462" width="246" height="7" rx="3"/><rect x="250" y="481" width="303" height="7" rx="3"/><rect x="250" y="500" width="360" height="7" rx="3"/><rect x="250" y="519" width="117" height="7" rx="3"/>
+  </g>
+  <rect x="720" y="380" width="240" height="200" rx="14" fill="#111827" stroke="#334155" stroke-width="8"/>
+  <rect x="300" y="620" width="380" height="26" rx="10" fill="#334155"/>
+  <circle cx="900" cy="620" r="34" fill="#f59e0b" opacity="0.85"/>
+</svg>

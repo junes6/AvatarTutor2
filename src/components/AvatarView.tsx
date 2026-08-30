@@ -30,10 +30,12 @@ export default function AvatarView({ tutor, speaking, layer, size = 220 }: Props
   useEffect(() => {
     if (layer !== "2" || l2Failed) return;
     let mounted = true;
+    const controller = new AbortController();
     fetch("/api/avatar/session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ tutorId: tutor.id }),
+      signal: controller.signal,
     })
       .then((r) => r.json())
       .then((data: { ok: boolean; reason?: string }) => {
@@ -51,6 +53,7 @@ export default function AvatarView({ tutor, speaking, layer, size = 220 }: Props
       .catch(() => mounted && setL2Failed(true));
     return () => {
       mounted = false;
+      controller.abort();
     };
   }, [layer, l2Failed, tutor.id]);
 
@@ -58,8 +61,11 @@ export default function AvatarView({ tutor, speaking, layer, size = 220 }: Props
   useEffect(() => {
     let mounted = true;
     if (layer === "0") {
-      setResolved("0");
-      return;
+      const timer = window.setTimeout(() => mounted && setResolved("0"), 0);
+      return () => {
+        mounted = false;
+        window.clearTimeout(timer);
+      };
     }
     fetch(`/avatars/video/${tutor.id}-idle.mp4`, { method: "HEAD" })
       .then((r) => {
@@ -97,13 +103,16 @@ function VideoAvatar({ tutor, speaking, size }: { tutor: TutorLite; speaking: bo
 
   return (
     <div
-      className="relative rounded-3xl overflow-hidden shadow-2xl"
-      style={{ width: size, height: size * 1.25, boxShadow: `0 0 60px ${tutor.color}33` }}
+      className={`avatar-view avatar-video ${speaking ? "is-speaking" : ""}`}
+      style={{ width: size, height: size * 1.16, "--avatar-color": tutor.color } as React.CSSProperties}
+      role="img"
+      aria-label={`${tutor.name}${speaking ? "이 말하는 중" : ""}`}
     >
       <video ref={idleRef} src={`/avatars/video/${tutor.id}-idle.mp4`} muted loop playsInline
-        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${speaking ? "opacity-0" : "opacity-100"}`} />
+        className={`avatar-video-layer ${speaking ? "opacity-0" : "opacity-100"}`} />
       <video ref={talkRef} src={`/avatars/video/${tutor.id}-talk.mp4`} muted loop playsInline
-        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${speaking ? "opacity-100" : "opacity-0"}`} />
+        className={`avatar-video-layer ${speaking ? "opacity-100" : "opacity-0"}`} />
+      <span className="avatar-status-ring" aria-hidden="true" />
     </div>
   );
 }
@@ -114,10 +123,7 @@ function PhotoAvatar({ tutor, speaking, size }: { tutor: TutorLite; speaking: bo
   const rafRef = useRef(0);
 
   useEffect(() => {
-    if (!speaking) {
-      setBars([0.15, 0.15, 0.15, 0.15, 0.15]);
-      return;
-    }
+    if (!speaking) return;
     let t = 0;
     const loop = () => {
       t += 0.25;
@@ -130,33 +136,26 @@ function PhotoAvatar({ tutor, speaking, size }: { tutor: TutorLite; speaking: bo
     return () => clearTimeout(rafRef.current);
   }, [speaking]);
 
+  const visibleBars = speaking ? bars : [0.15, 0.15, 0.15, 0.15, 0.15];
+
   return (
-    <div className="flex flex-col items-center gap-4">
-      <div className="relative" style={{ width: size, height: size }}>
-        {/* 발화 중 펄스 링 */}
-        <div
-          className={`absolute inset-0 rounded-full transition-all duration-300 ${speaking ? "scale-110 opacity-100" : "scale-100 opacity-0"}`}
-          style={{ border: `3px solid ${tutor.color}`, filter: "blur(1px)" }}
-        />
-        <div
-          className={`absolute -inset-3 rounded-full ${speaking ? "animate-pulse" : ""}`}
-          style={{ background: `radial-gradient(circle, ${tutor.color}22 0%, transparent 70%)` }}
-        />
+    <div className={`avatar-view avatar-photo ${speaking ? "is-speaking" : ""}`} style={{ "--avatar-color": tutor.color } as React.CSSProperties}>
+      <div className="avatar-photo-frame" style={{ width: size, height: size }} role="img" aria-label={`${tutor.name}${speaking ? "이 말하는 중" : ""}`}>
+        <span className="avatar-aura" aria-hidden="true" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={tutor.profileImage}
-          alt={tutor.name}
-          className={`relative w-full h-full rounded-full object-cover border-4 transition-transform duration-500 ${speaking ? "scale-[1.03]" : "scale-100 avatar-idle-bob"}`}
-          style={{ borderColor: tutor.color }}
+          alt=""
+          className={`avatar-photo-image ${speaking ? "is-speaking" : "avatar-idle-bob"}`}
           draggable={false}
         />
+        <span className="avatar-status-ring" aria-hidden="true" />
       </div>
-      {/* 음성 파형 (입모양 대용 애니메이션) */}
-      <div className="flex items-end gap-1.5 h-8">
-        {bars.map((b, i) => (
+      <div className="avatar-wave" aria-hidden="true">
+        {visibleBars.map((b, i) => (
           <div
             key={i}
-            className="w-2 rounded-full transition-all duration-100"
-            style={{ height: `${b * 32}px`, background: tutor.color, opacity: speaking ? 1 : 0.35 }}
+            style={{ height: `${Math.max(3, b * 17)}px`, opacity: speaking ? 1 : 0.3 }}
           />
         ))}
       </div>
