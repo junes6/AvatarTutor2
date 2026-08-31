@@ -37,7 +37,7 @@ export default function LeaveSheet({ tutorName, onClose, onLeave }: Props) {
       >
         <div className="sheet-handle" />
         <h2 id="leave-title" className="text-[19px] font-semibold">{tutorName}와의 채팅방을 나갈까요?</h2>
-        <p className="mt-2 text-[13px] leading-relaxed text-white/55">
+        <p className="mt-2 text-[13px] leading-relaxed text-ink-secondary">
           대화 기록은 보관되고 언제든 다시 시작할 수 있어요. 레벨·복습 큐·XP는 그대로 남아요.
         </p>
 

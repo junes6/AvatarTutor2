@@ -14,6 +14,31 @@
 | 근황 | 매번 새로 지어냄 | **2~4주치 라이프 스케줄을 미리 생성.** 여행을 가면 그 기간 내내 그 도시 이야기가 이어지고 시차·응답 속도까지 바뀐다 |
 | 목 모드 | 조용히 폴백 | **상시 배너로 알린다.** `/api/health`가 실제 호출로 키를 검증한다 |
 
+## 디자인 시스템 — 노랑·블랙 토큰
+
+**색은 `src/app/globals.css`의 토큰 블록에만 존재한다.** 컴포넌트 규칙과 Tailwind 유틸리티는 `var(--토큰)`만 쓰므로, 토큰 한 곳을 고치면 전 화면이 바뀐다. `npm run test:design`이 이 규칙을 강제한다 (토큰 밖 하드코딩 0건, 애플 블루 잔재 0건).
+
+| 축 | 토큰 |
+|---|---|
+| 표면 | `--bg` `--surface` `--surface-alt` `--surface-raised` `--fill` `--fill-strong` `--line` `--overlay` |
+| 텍스트 | `--ink` `--ink-secondary` `--ink-tertiary`(비활성 전용) |
+| 브랜드 | `--yellow` `--yellow-deep` `--yellow-soft` `--on-yellow` `--on-yellow-soft` `--accent-text` |
+| 상태 | `--success` `--danger` (+ `-soft` 배경) |
+| 말풍선 | `--bubble-me-bg/text` `--bubble-you-bg/text` |
+| 형태·여백 | `--radius-s/m/l/pill` `--shadow` `--pad`(20px) `--row-min`(72px) `--tap`(44px) |
+
+적용 규칙:
+- 포인트(노랑)는 **화면당 소수 지점에만** — 내 말풍선, 주요 액션, 안 읽은 배지, XP·스트릭, 진행 바.
+- **노랑 위 텍스트·아이콘은 항상 블랙**(`--on-yellow`). `--ink`는 다크에서 밝아지므로 노랑 위에 쓰지 않는다.
+- 흰 배경에서 노랑 글씨는 읽히지 않으므로, 강조 텍스트는 짙은 호박색 `--accent-text`를 쓴다.
+- 그림자는 `--shadow` 한 종류. 비활성은 투명도가 아니라 `--ink-tertiary`로 표현한다.
+
+### 테마
+기본은 **라이트**. 설정 → 화면에서 라이트/다크/시스템을 고른다(`<html data-theme>` + localStorage, 첫 페인트 전 부트스트랩으로 깜빡임 없음).
+**통화 화면만 테마와 무관하게 항상 어둡다** — 얼굴이 주인공이기 때문이다. 같은 토큰명을 어두운 값으로 다시 정의하는 스코프(`.surface-dark`, `.call-*`)라서 안쪽 규칙은 그대로 `var()`만 쓴다.
+
+명암비는 실제 렌더된 색으로 검증했고(WCAG AA), 라이트·다크 양쪽에서 남은 미달은 비활성 컨트롤뿐이다(WCAG 예외).
+
 ## 핵심 아키텍처
 
 대화 품질은 아바타 API 내장 기능에 맡기지 않는다. **두뇌(LLM)·귀(STT)·입(TTS)을 직접 연결한 자체 파이프라인** 위에, 아바타는 표시 레이어로만 얹는다.
@@ -156,7 +181,7 @@ OpenAI 하나로 시작하려면 `.env.local`에 `LLM_PROVIDER=openai`, `OPENAI_
 | PWA (설치·푸시) | `public/manifest.webmanifest`, `public/sw.js` |
 | 카카오톡 공유·채널·AI 챗봇 스킬 | `src/lib/kakao.ts`, `src/app/api/kakao/skill/route.ts` |
 
-주요 회귀는 `npm run test:all` 하나로 실행한다 (`test:conversation`, `test:systems`, `test:async`, `test:recorder`, `test:ui-recovery`, `test:progress`).
+주요 회귀는 `npm run test:all` 하나로 실행한다 (`test:conversation`, `test:systems`, `test:async`, `test:recorder`, `test:ui-recovery`, `test:progress`, `test:design`).
 
 ## 카카오톡 연동
 

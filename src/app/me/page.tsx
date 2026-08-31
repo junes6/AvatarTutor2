@@ -364,7 +364,7 @@ function TutorPickSheet({
         <div className="sheet-handle" />
         <h2 className="text-[19px] font-semibold">누구와 할까요?</h2>
         {friends.length === 0 ? (
-          <p className="mt-3 text-[13px] text-white/55">아직 친구가 없어요. 잠시 뒤 새 친구가 말을 걸 거예요.</p>
+          <p className="mt-3 text-[13px] text-ink-secondary">아직 친구가 없어요. 잠시 뒤 새 친구가 말을 걸 거예요.</p>
         ) : (
           <div className="tutor-pick-grid">
             {friends.map((friend) => (

@@ -236,15 +236,15 @@ function AppLoading() {
 
 function LoadError({ onRetry }: { onRetry: () => void }) {
   return (
-    <main className="grid min-h-dvh place-items-center px-6 text-white">
+    <main className="grid min-h-dvh place-items-center px-6 text-ink">
       <div className="w-full max-w-xs text-center">
         <div className="text-[42px]" aria-hidden="true">↻</div>
         <h1 className="mt-3 text-[19px] font-semibold">목록을 불러오지 못했어요</h1>
-        <p className="mt-2 text-[13px] leading-relaxed text-white/48">연결을 확인한 뒤 다시 시도해 주세요.</p>
+        <p className="mt-2 text-[13px] leading-relaxed text-ink-secondary">연결을 확인한 뒤 다시 시도해 주세요.</p>
         <button
           type="button"
           onClick={onRetry}
-          className="apple-primary-button mt-5 min-h-12 w-full rounded-2xl bg-[var(--apple-blue)] text-[14px] font-semibold"
+          className="apple-primary-button mt-5 min-h-12 w-full rounded-2xl bg-yellow text-[14px] font-semibold"
         >
           다시 시도
         </button>

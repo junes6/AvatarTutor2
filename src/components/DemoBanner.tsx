@@ -95,7 +95,7 @@ export default function DemoBanner() {
           >
             <div className="sheet-handle" />
             <h2 id="demo-title" className="text-[19px] font-semibold">연결 상태</h2>
-            <p className="mt-2 text-[13px] leading-relaxed text-white/55">
+            <p className="mt-2 text-[13px] leading-relaxed text-ink-secondary">
               아래 항목이 실제 호출로 검증된 결과입니다. 대화 AI가 연결되지 않으면 실제 대화가 아닙니다.
             </p>
             <ul className="provider-list">
@@ -112,7 +112,7 @@ export default function DemoBanner() {
                 </li>
               ))}
             </ul>
-            <p className="mt-3 text-[12px] leading-relaxed text-white/42">
+            <p className="mt-3 text-[12px] leading-relaxed text-ink-secondary">
               <code>.env.local</code>에 <code>ANTHROPIC_API_KEY</code> 또는 <code>OPENAI_API_KEY</code>를 넣고
               서버를 다시 시작하세요.
             </p>

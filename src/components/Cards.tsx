@@ -127,7 +127,7 @@ export function CorrectionCardView({ card, tutorId }: { card: CorrectionCard; tu
 export function FlipCard({ card, tutorId }: { card: CorrectionCard; tutorId: string }) {
   const [flipped, setFlipped] = useState(false);
   return (
-    <div className="w-full overflow-hidden rounded-2xl border border-white/10 bg-white/5 transition-all duration-300 hover:border-white/25">
+    <div className="w-full overflow-hidden rounded-2xl border border-line bg-fill transition-all duration-300 hover:border-line">
       <button
         type="button"
         onClick={() => setFlipped((value) => !value)}
@@ -137,14 +137,14 @@ export function FlipCard({ card, tutorId }: { card: CorrectionCard; tutorId: str
       >
         {!flipped ? (
           <>
-            <div className="mb-1 text-[11px] text-white/40">내가 한 말 · 눌러서 교정 보기</div>
-            <div className="text-base text-white/80">{card.original}</div>
+            <div className="mb-1 text-[11px] text-ink-secondary">내가 한 말 · 눌러서 교정 보기</div>
+            <div className="text-base text-ink">{card.original}</div>
           </>
         ) : (
           <>
             <div className="mb-1 text-[11px] text-emerald-300">더 자연스러운 표현 · 눌러서 원문 보기</div>
-            <div className="text-base font-bold text-white">{card.better}</div>
-            <div className="mt-0.5 text-sm text-white/60">{card.ko}</div>
+            <div className="text-base font-bold text-ink">{card.better}</div>
+            <div className="mt-0.5 text-sm text-ink-secondary">{card.ko}</div>
             {card.reason && <div className="mt-1.5 text-xs text-amber-200/90">💡 {card.reason}</div>}
           </>
         )}

@@ -227,13 +227,13 @@ export default function OnboardingPage() {
   const busy = evaluating || isFinalizing;
 
   return (
-    <main className="relative min-h-dvh overflow-x-hidden bg-[#07080c] text-white">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[360px] bg-[radial-gradient(circle_at_50%_-30%,rgba(10,132,255,0.3),transparent_68%)]" />
+    <main className="relative min-h-dvh overflow-x-hidden bg-bg text-ink">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[360px] bg-[radial-gradient(circle_at_50%_-30%,var(--yellow-soft),transparent_68%)]" />
 
       <div className="relative mx-auto flex min-h-dvh w-full max-w-[430px] flex-col px-5 pb-[max(28px,env(safe-area-inset-bottom))] pt-[max(18px,env(safe-area-inset-top))]">
         {step !== "welcome" && (
           <header className="mb-7" aria-label={`시작 설정 ${stepIndex + 1}/${FLOW_STEPS.length}`}>
-            <div className="flex items-center justify-between text-[12px] font-medium text-white/45">
+            <div className="flex items-center justify-between text-[12px] font-medium text-ink-secondary">
               <span>시작 설정</span>
               <span className="tabular-nums">{stepIndex + 1} / {FLOW_STEPS.length}</span>
             </div>
@@ -241,7 +241,7 @@ export default function OnboardingPage() {
               {FLOW_STEPS.map((item, index) => (
                 <span
                   key={item.id}
-                  className={`h-1 rounded-full transition-colors ${index <= stepIndex ? "bg-[var(--apple-blue)]" : "bg-white/12"}`}
+                  className={`h-1 rounded-full transition-colors ${index <= stepIndex ? "bg-yellow" : "bg-fill-strong"}`}
                 />
               ))}
             </div>
@@ -254,7 +254,7 @@ export default function OnboardingPage() {
           {step === "name" && (
             <section className="animate-[slideUp_0.35s_ease]" aria-labelledby="name-title">
               <StepHeading eyebrow="01 · PROFILE" title="어떻게 불러드릴까요?" description="친구들이 부를 이름 하나만 알려주세요." id="name-title" />
-              <label className="mt-8 block text-[12px] font-semibold text-white/55" htmlFor="display-name">이름 또는 닉네임</label>
+              <label className="mt-8 block text-[12px] font-semibold text-ink-secondary" htmlFor="display-name">이름 또는 닉네임</label>
               <input
                 id="display-name"
                 value={name}
@@ -270,7 +270,7 @@ export default function OnboardingPage() {
                 autoComplete="nickname"
                 enterKeyHint="next"
                 maxLength={24}
-                className="mt-2 h-14 w-full rounded-2xl border border-white/10 bg-white/[0.07] px-4 text-[17px] font-medium outline-none transition focus:border-[var(--apple-blue)] focus:bg-white/[0.1] placeholder:text-white/25"
+                className="mt-2 h-14 w-full rounded-2xl border border-line bg-fill px-4 text-[17px] font-medium outline-none transition focus:border-yellow focus:bg-fill placeholder:text-ink-tertiary"
               />
               <PrimaryButton onClick={() => setStep("leveltest")} disabled={!name.trim()} className="mt-5">계속</PrimaryButton>
             </section>
@@ -281,7 +281,7 @@ export default function OnboardingPage() {
               <StepHeading eyebrow="02 · VOICE CHECK" title="영어로 잠깐 말해보세요" description="30초 정도면 충분해요. 틀려도 괜찮습니다." id="test-title" />
 
               <div className="mt-6">
-                <div className="apple-segment grid grid-cols-3 rounded-xl bg-white/[0.07] p-1" role="tablist" aria-label="말하기 주제">
+                <div className="apple-segment grid grid-cols-3 rounded-xl bg-fill p-1" role="tablist" aria-label="말하기 주제">
                   {PROMPTS.map((prompt, index) => (
                     <button
                       key={prompt.label}
@@ -290,13 +290,13 @@ export default function OnboardingPage() {
                       aria-selected={selectedPrompt === index}
                       onClick={() => setSelectedPrompt(index)}
                       disabled={isRecording || busy || phase === "requesting"}
-                      className={`min-h-11 rounded-[9px] px-2 text-[12px] font-semibold transition ${selectedPrompt === index ? "is-selected bg-white text-[#1d1d1f] shadow-sm" : "text-white/50"}`}
+                      className={`min-h-11 rounded-[9px] px-2 text-[12px] font-semibold transition ${selectedPrompt === index ? "is-selected bg-surface text-ink shadow-sm" : "text-ink-secondary"}`}
                     >
                       {prompt.label}
                     </button>
                   ))}
                 </div>
-                <p className="mt-3 min-h-11 rounded-2xl border border-white/[0.08] bg-white/[0.045] px-4 py-3 text-[13px] leading-relaxed text-white/68">
+                <p className="mt-3 min-h-11 rounded-2xl border border-line bg-fill px-4 py-3 text-[13px] leading-relaxed text-ink-secondary">
                   {PROMPTS[selectedPrompt].text}
                 </p>
               </div>
@@ -308,37 +308,37 @@ export default function OnboardingPage() {
                   disabled={busy}
                   aria-label={phase === "requesting" ? "마이크 연결 취소" : isRecording ? "녹음 끝내기" : "녹음 시작하기"}
                   aria-pressed={isRecording}
-                  className={`relative grid h-24 w-24 place-items-center rounded-full text-white shadow-[0_18px_50px_rgba(0,0,0,0.32)] transition active:scale-95 disabled:opacity-55 ${isRecording ? "bg-[var(--apple-red)]" : "bg-[var(--apple-blue)]"}`}
-                  style={isRecording ? { boxShadow: `0 0 ${24 + micLevel * 36}px rgba(255,69,58,.26)` } : undefined}
+                  className={`relative grid h-24 w-24 place-items-center rounded-full text-ink shadow-[var(--shadow)] transition active:scale-95 disabled:bg-fill disabled:text-ink-tertiary ${isRecording ? "bg-danger" : "bg-yellow"}`}
+                  style={isRecording ? { boxShadow: `0 0 ${24 + micLevel * 36}px color-mix(in srgb, var(--danger) 26%, transparent)` } : undefined}
                 >
                   {busy || phase === "requesting" ? <span className="apple-loader h-6 w-6" aria-hidden="true" /> : isRecording ? <StopIcon /> : <MicIcon />}
-                  {isRecording && <span className="absolute inset-[-7px] rounded-full border border-[var(--apple-red)]/35" aria-hidden="true" />}
+                  {isRecording && <span className="absolute inset-[-7px] rounded-full border border-danger" aria-hidden="true" />}
                 </button>
                 <div className="mt-3 min-h-10 text-center" aria-live="polite">
                   <div className="text-[14px] font-semibold">
                     {evaluating ? "레벨을 확인하고 있어요" : isFinalizing ? "말한 내용을 정리하고 있어요" : phase === "requesting" ? "마이크 연결 중 · 탭해서 취소" : isRecording ? `${seconds}초 · 탭해서 완료` : "탭해서 말하기"}
                   </div>
-                  <div className="mt-1 text-[11px] text-white/38">최대 60초 뒤 자동으로 끝나요</div>
+                  <div className="mt-1 text-[11px] text-ink-secondary">최대 60초 뒤 자동으로 끝나요</div>
                 </div>
               </div>
 
-              <div className={`mt-5 rounded-[22px] border p-4 transition ${isRecording && hasDetectedSpeech ? "border-[var(--apple-green)]/35 bg-[var(--apple-green)]/8" : "border-white/[0.08] bg-white/[0.045]"}`} aria-live="polite">
+              <div className={`mt-5 rounded-[22px] border p-4 transition ${isRecording && hasDetectedSpeech ? "border-[var(--success)]/35 bg-success-soft" : "border-line bg-fill"}`} aria-live="polite">
                 <div className="flex items-center justify-between gap-3">
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-white/42">내 말</span>
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-secondary">내 말</span>
                   {isRecording && <VoiceBars level={micLevel} />}
                 </div>
-                <p className={`mt-2 min-h-10 text-[14px] leading-relaxed ${liveTranscript ? "text-white/86" : "text-white/32"}`}>
+                <p className={`mt-2 min-h-10 text-[14px] leading-relaxed ${liveTranscript ? "text-ink" : "text-ink-secondary"}`}>
                   {liveTranscript || (isSpeechRecognitionSupported ? "말하면 여기에 바로 표시돼요." : "음성은 녹음 후 정확히 확인해요.")}
                 </p>
               </div>
 
-              {(recorderError || voiceNotice) && <p className="mt-3 text-center text-[12px] text-[#ff9f8f]" role="alert">{recorderError?.message || voiceNotice}</p>}
+              {(recorderError || voiceNotice) && <p className="mt-3 text-center text-[12px] text-danger" role="alert">{recorderError?.message || voiceNotice}</p>}
 
               <button
                 type="button"
                 onClick={() => { cancel(); setVoiceNotice(""); setLevel(2); setNote(""); setHeardText(""); setStep("result"); }}
                 disabled={isRecording || busy}
-                className="mx-auto mt-5 block min-h-11 px-4 text-[13px] font-medium text-white/40 transition hover:text-white/65 disabled:opacity-30"
+                className="mx-auto mt-5 block min-h-11 px-4 text-[13px] font-medium text-ink-secondary transition hover:text-ink-secondary disabled:opacity-30"
               >
                 지금은 건너뛰기
               </button>
@@ -347,20 +347,20 @@ export default function OnboardingPage() {
 
           {step === "result" && (
             <section className="animate-[slideUp_0.35s_ease] text-center" aria-labelledby="result-title">
-              <div className="mx-auto grid h-16 w-16 place-items-center rounded-[22px] bg-[var(--apple-blue)]/15 text-[var(--apple-blue)]"><LevelIcon /></div>
-              <p className="mt-5 text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--apple-blue)]">Your level</p>
+              <div className="mx-auto grid h-16 w-16 place-items-center rounded-[22px] bg-yellow-soft text-accent-text"><LevelIcon /></div>
+              <p className="mt-5 text-[12px] font-semibold uppercase tracking-[0.12em] text-accent-text">Your level</p>
               <h1 id="result-title" tabIndex={-1} className="mt-2 text-[32px] font-semibold tracking-[-0.045em] outline-none">Level {level}</h1>
               <div className="mx-auto mt-5 grid max-w-[280px] grid-cols-5 gap-2" role="img" aria-label={`레벨 5단계 중 ${level}단계`}>
-                {[1, 2, 3, 4, 5].map((item) => <span key={item} className={`h-1.5 rounded-full ${item <= level ? "bg-[var(--apple-blue)]" : "bg-white/12"}`} />)}
+                {[1, 2, 3, 4, 5].map((item) => <span key={item} className={`h-1.5 rounded-full ${item <= level ? "bg-yellow" : "bg-fill-strong"}`} />)}
               </div>
 
-              <div className="mt-7 rounded-[24px] border border-white/[0.08] bg-white/[0.055] p-5 text-left">
-                <div className="text-[12px] font-semibold text-white/45">맞춤 대화 설정</div>
-                <p className="mt-2 text-[14px] leading-relaxed text-white/75">{note || "지금 수준에 맞춰 문장 길이와 말하기 속도를 조절할게요."}</p>
+              <div className="mt-7 rounded-[24px] border border-line bg-fill p-5 text-left">
+                <div className="text-[12px] font-semibold text-ink-secondary">맞춤 대화 설정</div>
+                <p className="mt-2 text-[14px] leading-relaxed text-ink">{note || "지금 수준에 맞춰 문장 길이와 말하기 속도를 조절할게요."}</p>
                 {heardText && (
-                  <div className="mt-4 border-t border-white/[0.08] pt-4">
-                    <div className="text-[11px] font-semibold text-white/38">인식된 문장</div>
-                    <p className="mt-1 line-clamp-3 text-[13px] leading-relaxed text-white/58">“{heardText}”</p>
+                  <div className="mt-4 border-t border-line pt-4">
+                    <div className="text-[11px] font-semibold text-ink-secondary">인식된 문장</div>
+                    <p className="mt-1 line-clamp-3 text-[13px] leading-relaxed text-ink-secondary">“{heardText}”</p>
                   </div>
                 )}
               </div>
@@ -442,30 +442,30 @@ export default function OnboardingPage() {
               />
 
               {matchStatus === "loading" && (
-                <p className="mt-6 text-center text-[13px] text-white/45" role="status">궁합을 계산하는 중이에요.</p>
+                <p className="mt-6 text-center text-[13px] text-ink-secondary" role="status">궁합을 계산하는 중이에요.</p>
               )}
 
               {matchStatus === "ready" && matches.length > 0 && (
-                <div className="mt-6 overflow-hidden rounded-[24px] border border-white/[0.09] bg-white/[0.05] divide-y divide-white/[0.08]">
+                <div className="mt-6 overflow-hidden rounded-[24px] border border-line bg-fill divide-y divide-line">
                   {matches.map((match) => (
                     <div key={match.id} className="flex min-h-24 w-full items-center gap-3.5 px-4 py-4 text-left">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={match.profileImage}
                         alt={`${match.koName} 프로필`}
-                        className="h-14 w-14 shrink-0 rounded-full object-cover ring-1 ring-white/15"
+                        className="h-14 w-14 shrink-0 rounded-full object-cover ring-1 ring-line"
                         style={{ boxShadow: `0 0 0 2px ${match.color}55` }}
                       />
                       <span className="min-w-0 flex-1">
                         <span className="flex min-w-0 items-baseline gap-2">
                           <strong className="shrink-0 whitespace-nowrap text-[15px] font-semibold">{match.koName}</strong>
-                          <span className="min-w-0 truncate text-[10px] text-white/38">{match.nationality} · {match.job}</span>
+                          <span className="min-w-0 truncate text-[10px] text-ink-secondary">{match.nationality} · {match.job}</span>
                         </span>
-                        <span className="mt-1 line-clamp-2 block text-[12px] leading-relaxed text-white/52">{match.bio}</span>
+                        <span className="mt-1 line-clamp-2 block text-[12px] leading-relaxed text-ink-secondary">{match.bio}</span>
                         {match.reasons.length > 0 && (
                           <span className="mt-2 flex flex-wrap gap-1.5">
                             {match.reasons.slice(0, 3).map((reason) => (
-                              <span key={reason} className="rounded-full bg-white/[0.08] px-2 py-1 text-[10px] text-white/55">
+                              <span key={reason} className="rounded-full bg-fill px-2 py-1 text-[10px] text-ink-secondary">
                                 {reason}
                               </span>
                             ))}
@@ -473,8 +473,8 @@ export default function OnboardingPage() {
                         )}
                       </span>
                       <span className="shrink-0 text-right">
-                        <strong className="block text-[16px] font-semibold text-[var(--apple-blue)]">{match.score}</strong>
-                        <small className="block text-[9px] text-white/35">궁합</small>
+                        <strong className="block text-[16px] font-semibold text-accent-text">{match.score}</strong>
+                        <small className="block text-[9px] text-ink-secondary">궁합</small>
                       </span>
                     </div>
                   ))}
@@ -482,12 +482,12 @@ export default function OnboardingPage() {
               )}
 
               {matchStatus === "error" && (
-                <div className="mt-5 rounded-2xl border border-[var(--apple-red)]/20 bg-[var(--apple-red)]/[0.08] p-4 text-center" role="alert">
-                  <p className="text-[12px] text-[#ffaaa4]">궁합을 계산하지 못했어요.</p>
+                <div className="mt-5 rounded-2xl border border-danger bg-danger-soft p-4 text-center" role="alert">
+                  <p className="text-[12px] text-danger">궁합을 계산하지 못했어요.</p>
                   <button
                     type="button"
                     onClick={() => profile && void loadMatches(profile)}
-                    className="mt-2 min-h-11 px-4 text-[13px] font-semibold text-white"
+                    className="mt-2 min-h-11 px-4 text-[13px] font-semibold text-ink"
                   >
                     다시 시도
                   </button>
@@ -501,11 +501,11 @@ export default function OnboardingPage() {
                 type="button"
                 onClick={() => setStep("profile")}
                 disabled={completing}
-                className="mx-auto mt-4 block min-h-11 px-4 text-[13px] font-medium text-white/40 transition hover:text-white/65 disabled:opacity-30"
+                className="mx-auto mt-4 block min-h-11 px-4 text-[13px] font-medium text-ink-secondary transition hover:text-ink-secondary disabled:opacity-30"
               >
                 프로필 다시 고르기
               </button>
-              {completeError && <p className="mt-4 text-center text-[12px] text-[#ffaaa4]" role="alert">{completeError}</p>}
+              {completeError && <p className="mt-4 text-center text-[12px] text-danger" role="alert">{completeError}</p>}
             </section>
           )}
         </div>
@@ -517,7 +517,7 @@ export default function OnboardingPage() {
 function ChoiceGroup({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <fieldset className="mt-6">
-      <legend className="mb-2.5 text-[12px] font-semibold text-white/45">{label}</legend>
+      <legend className="mb-2.5 text-[12px] font-semibold text-ink-secondary">{label}</legend>
       <div className="flex flex-wrap gap-2">{children}</div>
     </fieldset>
   );
@@ -539,8 +539,8 @@ function ChoiceChip({
       aria-pressed={selected}
       className={`min-h-11 rounded-full border px-3.5 text-[13px] transition active:scale-95 ${
         selected
-          ? "border-[var(--apple-blue)] bg-[var(--apple-blue)]/20 text-white"
-          : "border-white/[0.1] bg-white/[0.05] text-white/60"
+          ? "border-yellow bg-yellow-soft text-ink"
+          : "border-line bg-fill text-ink-secondary"
       }`}
     >
       {children}
@@ -551,14 +551,14 @@ function ChoiceChip({
 function WelcomeStep({ onNext }: { onNext: () => void }) {
   return (
     <section className="animate-[slideUp_0.4s_ease] text-center" aria-labelledby="welcome-title">
-      <div className="mx-auto grid h-20 w-20 place-items-center rounded-[26px] border border-white/15 bg-white/[0.09] text-white shadow-[0_24px_80px_rgba(10,132,255,0.18)] backdrop-blur-xl"><ConversationIcon /></div>
-      <p className="mt-8 text-[12px] font-semibold uppercase tracking-[0.16em] text-[var(--apple-blue)]">Avatar Tutor</p>
+      <div className="mx-auto grid h-20 w-20 place-items-center rounded-[26px] border border-line bg-surface text-ink shadow-[var(--shadow)]"><ConversationIcon /></div>
+      <p className="mt-8 text-[12px] font-semibold uppercase tracking-[0.16em] text-accent-text">Avatar Tutor</p>
       <h1 id="welcome-title" className="mt-3 text-[34px] font-semibold leading-[1.12] tracking-[-0.05em]">
         말이 통하는<br />나만의 영어 친구
       </h1>
-      <p className="mx-auto mt-4 max-w-[280px] text-[14px] leading-relaxed text-white/52">내 말을 듣고, 기다리고, 자연스럽게 이어가는 회화 연습.</p>
+      <p className="mx-auto mt-4 max-w-[280px] text-[14px] leading-relaxed text-ink-secondary">내 말을 듣고, 기다리고, 자연스럽게 이어가는 회화 연습.</p>
       <PrimaryButton onClick={onNext} className="mt-10">시작하기</PrimaryButton>
-      <p className="mt-3 text-[11px] text-white/30">약 1분이면 준비가 끝나요</p>
+      <p className="mt-3 text-[11px] text-ink-secondary">약 1분이면 준비가 끝나요</p>
     </section>
   );
 }
@@ -566,9 +566,9 @@ function WelcomeStep({ onNext }: { onNext: () => void }) {
 function StepHeading({ eyebrow, title, description, id }: { eyebrow: string; title: string; description: string; id: string }) {
   return (
     <div>
-      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--apple-blue)]">{eyebrow}</p>
+      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-accent-text">{eyebrow}</p>
       <h1 id={id} tabIndex={-1} className="mt-2 text-[28px] font-semibold leading-tight tracking-[-0.04em] outline-none">{title}</h1>
-      <p className="mt-2 text-[13px] leading-relaxed text-white/48">{description}</p>
+      <p className="mt-2 text-[13px] leading-relaxed text-ink-secondary">{description}</p>
     </div>
   );
 }
@@ -578,7 +578,7 @@ function PrimaryButton({ children, className = "", ...props }: React.ButtonHTMLA
     <button
       type="button"
       {...props}
-      className={`apple-primary-button flex min-h-13 w-full items-center justify-center rounded-2xl bg-[var(--apple-blue)] px-5 text-[15px] font-semibold text-white shadow-[0_10px_26px_rgba(10,132,255,0.23)] transition active:scale-[0.98] disabled:opacity-35 ${className}`}
+      className={`apple-primary-button flex min-h-13 w-full items-center justify-center rounded-2xl bg-yellow px-5 text-[15px] font-semibold text-on-yellow shadow-[var(--shadow)] transition active:scale-[0.98] disabled:bg-fill disabled:text-ink-tertiary ${className}`}
     >
       {children}
     </button>
@@ -589,7 +589,7 @@ function VoiceBars({ level }: { level: number }) {
   return (
     <span className="flex h-4 items-center gap-0.5" aria-hidden="true">
       {[0.35, 0.65, 1, 0.6, 0.4].map((scale, index) => (
-        <span key={index} className="w-0.5 rounded-full bg-[var(--apple-green)] transition-[height] duration-75" style={{ height: `${Math.max(4, 4 + level * 13 * scale)}px` }} />
+        <span key={index} className="w-0.5 rounded-full bg-success transition-[height] duration-75" style={{ height: `${Math.max(4, 4 + level * 13 * scale)}px` }} />
       ))}
     </span>
   );

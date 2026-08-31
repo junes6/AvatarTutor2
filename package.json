@@ -19,9 +19,10 @@
     "test:ui-recovery": "tsx scripts/regression-ui-recovery.ts",
     "test:progress": "tsx scripts/regression-learning-progress.ts",
     "test:async": "tsx scripts/regression-async-chat.ts && tsx scripts/regression-chat-flow.ts",
-    "test:all": "npm run test:conversation && npm run test:systems && npm run test:recorder && npm run test:ui-recovery && npm run test:progress",
+    "test:all": "npm run test:conversation && npm run test:systems && npm run test:recorder && npm run test:ui-recovery && npm run test:progress && npm run test:design",
     "health": "tsx scripts/simulate.ts --health",
-    "matching": "tsx scripts/simulate.ts --matching"
+    "matching": "tsx scripts/simulate.ts --matching",
+    "test:design": "tsx scripts/regression-design-tokens.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.120.0",

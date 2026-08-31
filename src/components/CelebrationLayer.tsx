@@ -12,7 +12,14 @@ interface Particle {
   drift: number;
 }
 
-const COLORS = ["#F472B6", "#FBBF24", "#34D399", "#60A5FA", "#A78BFA", "#F87171"];
+// 브랜드 팔레트만 쓴다 — 값은 globals.css 토큰에서 온다.
+const COLORS = [
+  "var(--yellow)",
+  "var(--yellow-deep)",
+  "var(--yellow-soft)",
+  "var(--success)",
+  "var(--ink)",
+];
 
 interface Props {
   trigger: number; // 증가할 때마다 콘페티 발사
@@ -63,7 +70,7 @@ export default function CelebrationLayer({ trigger, combo, xpGain, bannerText }:
       {/* 스테이지 배너 */}
       {bannerText && (
         <div className="absolute inset-x-0 top-[42%] flex justify-center">
-          <div key={`banner-${trigger}-${bannerText}`} className="px-6 py-3 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 text-xl font-bold text-white animate-[bannerIn_2.2s_ease_forwards]">
+          <div key={`banner-${trigger}-${bannerText}`} className="px-6 py-3 rounded-2xl bg-fill backdrop-blur-lg border border-line text-xl font-bold text-ink animate-[bannerIn_2.2s_ease_forwards]">
             {bannerText}
           </div>
         </div>

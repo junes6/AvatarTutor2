@@ -452,7 +452,9 @@ export default function CallPage() {
     fetch("/api/state")
       .then((r) => r.json())
       .then((data) => {
-        const nextTutor = data.tutors.find((x: TutorInfo) => x.id === tutorId);
+        // /api/state는 활성 친구를 friends로, 보관된 친구를 archivedFriends로 준다.
+        const roster: TutorInfo[] = [...(data.friends ?? []), ...(data.archivedFriends ?? [])];
+        const nextTutor = roster.find((x: TutorInfo) => x.id === tutorId);
         if (!nextTutor) {
           setErrorMsg("존재하지 않는 튜터예요.");
           return;

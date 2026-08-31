@@ -46,7 +46,8 @@ export default function ReportPage() {
     fetch("/api/state")
       .then((response) => response.json())
       .then((data) => {
-        const tutor = data.tutors?.find((item: { id: string }) => item.id === session.tutorId);
+        const roster = [...(data.friends ?? []), ...(data.archivedFriends ?? [])];
+        const tutor = roster.find((item: { id: string }) => item.id === session.tutorId);
         if (tutor?.koName) setTutorName(tutor.koName);
       })
       .catch(() => {});
@@ -69,15 +70,15 @@ export default function ReportPage() {
 
   if (loadIssue) {
     return (
-      <main className="grid min-h-dvh place-items-center bg-[#07080c] px-6 text-white">
+      <main className="grid min-h-dvh place-items-center bg-bg px-6 text-ink">
         <div className="w-full max-w-xs text-center">
-          <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-white/[0.07] text-white/45"><DocumentIcon /></div>
+          <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-fill text-ink-secondary"><DocumentIcon /></div>
           <h1 className="mt-4 text-[18px] font-semibold">{loadIssue === "not-found" ? "리포트를 찾을 수 없어요" : "리포트를 불러오지 못했어요"}</h1>
-          <p className="mt-2 text-[13px] text-white/42">
+          <p className="mt-2 text-[13px] text-ink-secondary">
             {loadIssue === "not-found" ? "이미 정리된 기록이거나 주소가 올바르지 않아요." : "연결을 확인하고 잠시 뒤 다시 시도해 주세요."}
           </p>
-          <button type="button" onClick={retryLoad} className="apple-primary-button mt-5 min-h-12 w-full rounded-2xl bg-[var(--apple-blue)] text-[14px] font-semibold">다시 시도</button>
-          <button type="button" onClick={() => router.replace("/")} className="mt-2 min-h-11 w-full text-[13px] font-medium text-white/50">홈으로</button>
+          <button type="button" onClick={retryLoad} className="apple-primary-button mt-5 min-h-12 w-full rounded-2xl bg-yellow text-[14px] font-semibold">다시 시도</button>
+          <button type="button" onClick={() => router.replace("/")} className="mt-2 min-h-11 w-full text-[13px] font-medium text-ink-secondary">홈으로</button>
         </div>
       </main>
     );
@@ -114,39 +115,39 @@ export default function ReportPage() {
   ].filter(Boolean).join(" ");
 
   return (
-    <main className="relative min-h-dvh overflow-hidden bg-[#07080c] text-white">
-      <div className={`pointer-events-none absolute inset-x-0 top-0 h-[390px] ${sessionCompleted ? "bg-[radial-gradient(circle_at_50%_-20%,rgba(48,209,88,0.2),transparent_66%)]" : "bg-[radial-gradient(circle_at_50%_-20%,rgba(10,132,255,0.18),transparent_66%)]"}`} />
+    <main className="relative min-h-dvh overflow-hidden bg-bg text-ink">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[390px] bg-[radial-gradient(circle_at_50%_-20%,var(--yellow-soft),transparent_66%)]" />
       <div className="relative mx-auto w-full max-w-[430px] px-5 pb-[max(32px,env(safe-area-inset-bottom))] pt-[max(14px,env(safe-area-inset-top))]">
         <header className="flex min-h-12 items-center justify-between">
-          <button type="button" onClick={() => router.replace("/")} className="grid h-11 w-11 place-items-center rounded-full bg-white/[0.07] text-white/70 transition active:scale-95" aria-label="홈으로 돌아가기"><CloseIcon /></button>
-          <h1 className="text-[15px] font-semibold text-white/72">학습 리포트</h1>
+          <button type="button" onClick={() => router.replace("/")} className="grid h-11 w-11 place-items-center rounded-full bg-fill text-ink-secondary transition active:scale-95" aria-label="홈으로 돌아가기"><CloseIcon /></button>
+          <h1 className="text-[15px] font-semibold text-ink-secondary">학습 리포트</h1>
           <div className="h-11 w-11" aria-hidden="true" />
         </header>
 
         <section className="pb-1 pt-7 text-center" aria-labelledby="report-title">
-          <div className={`mx-auto grid h-16 w-16 place-items-center rounded-full ring-1 ${sessionCompleted ? "bg-[var(--apple-green)]/15 text-[var(--apple-green)] ring-[var(--apple-green)]/20" : "bg-[var(--apple-blue)]/15 text-[var(--apple-blue)] ring-[var(--apple-blue)]/20"}`}>
+          <div className={`mx-auto grid h-16 w-16 place-items-center rounded-full ring-1 ${sessionCompleted ? "bg-success-soft text-success ring-[var(--success)]/20" : "bg-yellow-soft text-accent-text ring-[var(--yellow)]/20"}`}>
             {sessionCompleted ? <CheckCircleIcon /> : <DocumentIcon />}
           </div>
-          <p className={`mt-5 text-[11px] font-semibold uppercase tracking-[0.14em] ${sessionCompleted ? "text-[var(--apple-green)]" : "text-[var(--apple-blue)]"}`}>
+          <p className={`mt-5 text-[11px] font-semibold uppercase tracking-[0.14em] ${sessionCompleted ? "text-success" : "text-accent-text"}`}>
             {sessionCompleted ? "Session complete" : "Practice saved"}
           </p>
           <h2 id="report-title" className="mt-2 text-[30px] font-semibold tracking-[-0.045em]">
             {sessionCompleted ? "오늘도 잘했어요" : userTurns > 0 ? "여기까지 연습했어요" : "이번 연습은 여기서 마쳤어요"}
           </h2>
-          <p className="mt-2 text-[13px] text-white/42">{sessionDate} · {modeLabel} · {durationLabel}</p>
+          <p className="mt-2 text-[13px] text-ink-secondary">{sessionDate} · {modeLabel} · {durationLabel}</p>
         </section>
 
-        <section className="mt-7 overflow-hidden rounded-[24px] border border-white/[0.09] bg-white/[0.055]" aria-label="세션 요약">
-          <div className="grid grid-cols-3 divide-x divide-white/[0.08] py-4">
-            <Stat label="획득 XP" value={`+${session.xpEarned}`} color="text-[#ffd60a]" />
-            <Stat label="내 발화" value={`${userTurns}회`} color="text-white" />
-            <Stat label="발음 평균" value={avgScore !== null ? `${avgScore}점` : "—"} color="text-[var(--apple-green)]" />
+        <section className="mt-7 overflow-hidden rounded-[24px] border border-line bg-fill" aria-label="세션 요약">
+          <div className="grid grid-cols-3 divide-x divide-line py-4">
+            <Stat label="획득 XP" value={`+${session.xpEarned}`} color="text-accent-text" />
+            <Stat label="내 발화" value={`${userTurns}회`} color="text-ink" />
+            <Stat label="발음 평균" value={avgScore !== null ? `${avgScore}점` : "—"} color="text-success" />
           </div>
         </section>
 
         {session.pronunciationScores.length >= 2 && (
           <ReportSection title="발음 흐름" caption="말할수록 어떻게 달라졌는지 확인해요">
-            <div className="rounded-[20px] border border-white/[0.075] bg-white/[0.04] p-4">
+            <div className="rounded-[20px] border border-line bg-fill p-4">
               <ScoreChart scores={session.pronunciationScores} />
             </div>
           </ReportSection>
@@ -157,13 +158,13 @@ export default function ReportPage() {
             title="오늘의 표현"
             caption={learningDone ? `${reportExpressions.length}개를 복습 큐에 담았어요` : `이번에 다룬 ${reportExpressions.length}개 표현이에요`}
           >
-            <div className="overflow-hidden rounded-[20px] border border-white/[0.08] bg-white/[0.045] divide-y divide-white/[0.075]">
+            <div className="overflow-hidden rounded-[20px] border border-line bg-fill divide-y divide-line">
               {reportExpressions.map((expression, index) => (
                 <div key={expression.id} className="flex gap-3 px-4 py-3.5">
-                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-lg bg-[var(--apple-blue)]/13 text-[10px] font-semibold text-[var(--apple-blue)]">{index + 1}</span>
+                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-lg bg-yellow-soft text-[10px] font-semibold text-accent-text">{index + 1}</span>
                   <div className="min-w-0">
                     <div className="break-words text-[14px] font-semibold leading-snug">{expression.en}</div>
-                    <div className="mt-1 break-words text-[11px] leading-relaxed text-white/43">{expression.ko}</div>
+                    <div className="mt-1 break-words text-[11px] leading-relaxed text-ink-secondary">{expression.ko}</div>
                   </div>
                 </div>
               ))}
@@ -180,21 +181,21 @@ export default function ReportPage() {
         )}
 
         {session.corrections.length === 0 && session.mode === "freetalk" && userTurns > 0 && (
-          <section className="mt-7 flex items-start gap-3 rounded-[20px] border border-[var(--apple-green)]/20 bg-[var(--apple-green)]/[0.08] p-4" aria-label="교정 결과">
-            <span className="mt-0.5 text-[var(--apple-green)]"><SmallCheckIcon /></span>
+          <section className="mt-7 flex items-start gap-3 rounded-[20px] border border-[var(--success)]/20 bg-success-soft p-4" aria-label="교정 결과">
+            <span className="mt-0.5 text-success"><SmallCheckIcon /></span>
             <div>
               <h2 className="text-[14px] font-semibold">자연스러운 대화였어요</h2>
-              <p className="mt-1 text-[12px] leading-relaxed text-white/47">이번 대화에서는 바로 고칠 표현이 없었습니다.</p>
+              <p className="mt-1 text-[12px] leading-relaxed text-ink-secondary">이번 대화에서는 바로 고칠 표현이 없었습니다.</p>
             </div>
           </section>
         )}
 
         <section className="mt-8" aria-labelledby="share-title">
-          <div className="rounded-[22px] border border-white/[0.08] bg-white/[0.05] p-4">
+          <div className="rounded-[22px] border border-line bg-fill p-4">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <h2 id="share-title" className="text-[14px] font-semibold">오늘의 기록 공유</h2>
-                <p className="mt-1 text-[11px] text-white/38">점수와 학습량만 안전하게 공유해요.</p>
+                <p className="mt-1 text-[11px] text-ink-secondary">점수와 학습량만 안전하게 공유해요.</p>
               </div>
               <ShareIcon />
             </div>
@@ -205,10 +206,10 @@ export default function ReportPage() {
         </section>
 
         <div className="mt-8 space-y-2.5">
-          <button type="button" onClick={() => router.replace(retryHref)} className="apple-primary-button flex min-h-13 w-full items-center justify-center rounded-2xl bg-[var(--apple-blue)] px-5 text-[15px] font-semibold shadow-[0_10px_26px_rgba(10,132,255,0.2)] transition active:scale-[0.98]">
+          <button type="button" onClick={() => router.replace(retryHref)} className="apple-primary-button flex min-h-13 w-full items-center justify-center rounded-2xl bg-yellow px-5 text-[15px] font-semibold text-on-yellow shadow-[var(--shadow)] transition active:scale-[0.98]">
             한 번 더 연습
           </button>
-          <button type="button" onClick={() => router.replace("/")} className="min-h-13 w-full rounded-2xl bg-white/[0.07] text-[14px] font-semibold text-white/72 transition active:scale-[0.98] active:bg-white/[0.11]">
+          <button type="button" onClick={() => router.replace("/")} className="min-h-13 w-full rounded-2xl bg-fill text-[14px] font-semibold text-ink-secondary transition active:scale-[0.98] active:bg-fill">
             홈으로
           </button>
         </div>
@@ -218,7 +219,7 @@ export default function ReportPage() {
 }
 
 function PageLoading() {
-  return <div className="grid min-h-dvh place-items-center bg-[#07080c]"><div className="apple-loader" role="status" aria-label="리포트 불러오는 중" /></div>;
+  return <div className="grid min-h-dvh place-items-center bg-bg"><div className="apple-loader" role="status" aria-label="리포트 불러오는 중" /></div>;
 }
 
 function ReportSection({ title, caption, children }: { title: string; caption: string; children: React.ReactNode }) {
@@ -226,7 +227,7 @@ function ReportSection({ title, caption, children }: { title: string; caption: s
     <section className="mt-8" aria-label={title}>
       <div className="mb-3 px-0.5">
         <h2 className="text-[17px] font-semibold tracking-[-0.02em]">{title}</h2>
-        <p className="mt-0.5 text-[11px] text-white/38">{caption}</p>
+        <p className="mt-0.5 text-[11px] text-ink-secondary">{caption}</p>
       </div>
       {children}
     </section>
@@ -237,7 +238,7 @@ function Stat({ label, value, color }: { label: string; value: string; color: st
   return (
     <div className="px-2 text-center">
       <div className={`text-[19px] font-semibold tabular-nums tracking-[-0.03em] ${color}`}>{value}</div>
-      <div className="mt-1 text-[10px] font-medium text-white/35">{label}</div>
+      <div className="mt-1 text-[10px] font-medium text-ink-secondary">{label}</div>
     </div>
   );
 }
@@ -260,13 +261,13 @@ function ScoreChart({ scores }: { scores: number[] }) {
       <title>{label}</title>
       {[50, 75, 100].map((guide) => {
         const y = topPadding + ((100 - guide) / 100) * (height - topPadding - bottomPadding);
-        return <line key={guide} x1={horizontalPadding} y1={y} x2={width - horizontalPadding} y2={y} stroke="rgba(255,255,255,.075)" strokeWidth="1" />;
+        return <line key={guide} x1={horizontalPadding} y1={y} x2={width - horizontalPadding} y2={y} stroke="var(--line)" strokeWidth="1" />;
       })}
-      <polyline points={points.map((point) => `${point.x},${point.y}`).join(" ")} fill="none" stroke="var(--apple-green)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+      <polyline points={points.map((point) => `${point.x},${point.y}`).join(" ")} fill="none" stroke="var(--yellow-deep)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
       {points.map((point, index) => (
         <g key={`${point.x}-${index}`}>
-          <circle cx={point.x} cy={point.y} r="4" fill="#07080c" stroke="var(--apple-green)" strokeWidth="2.5" />
-          <text x={point.x} y={height - 2} textAnchor="middle" fontSize="9" fill="rgba(255,255,255,.42)">{point.score}</text>
+          <circle cx={point.x} cy={point.y} r="4" fill="var(--surface)" stroke="var(--yellow-deep)" strokeWidth="2.5" />
+          <text x={point.x} y={height - 2} textAnchor="middle" fontSize="9" fill="var(--ink-secondary)">{point.score}</text>
         </g>
       ))}
     </svg>

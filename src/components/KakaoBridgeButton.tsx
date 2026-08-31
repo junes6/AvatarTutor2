@@ -108,14 +108,14 @@ export default function KakaoBridgeButton({ tutorName, shareText, action = "shar
       </button>
       {notice && <div id="kakao-share-status" className="kakao-notice" role="status" aria-live="polite">{notice}</div>}
       {manualText && (
-        <div className="absolute right-0 top-[calc(100%+42px)] z-40 w-[min(320px,calc(100vw-40px))] rounded-2xl border border-white/10 bg-[#202025] p-3 text-left shadow-2xl" role="dialog" aria-label="공유 내용 직접 복사">
-          <p className="mb-2 text-[11px] leading-relaxed text-white/65">아래 내용을 길게 눌러 복사한 뒤 카카오톡 채팅창에 붙여넣으세요.</p>
+        <div className="absolute right-0 top-[calc(100%+42px)] z-40 w-[min(320px,calc(100vw-40px))] rounded-2xl border border-line bg-surface-raised p-3 text-left shadow-2xl" role="dialog" aria-label="공유 내용 직접 복사">
+          <p className="mb-2 text-[11px] leading-relaxed text-ink-secondary">아래 내용을 길게 눌러 복사한 뒤 카카오톡 채팅창에 붙여넣으세요.</p>
           <textarea
             ref={manualTextareaRef}
             readOnly
             value={manualText}
             onFocus={(event) => event.currentTarget.select()}
-            className="h-28 w-full resize-none rounded-xl border border-white/10 bg-black/25 p-2.5 text-[11px] leading-relaxed text-white/80 outline-none focus:border-[#fee500]/60"
+            className="h-28 w-full resize-none rounded-xl border border-line bg-fill p-2.5 text-[11px] leading-relaxed text-ink outline-none focus:border-yellow"
             aria-label="복사할 공유 내용"
           />
           <div className="mt-2 flex gap-2">
@@ -123,8 +123,8 @@ export default function KakaoBridgeButton({ tutorName, shareText, action = "shar
               manualTextareaRef.current?.focus();
               manualTextareaRef.current?.select();
               showNotice("내용을 선택했어요. 복사를 누른 뒤 카카오톡에 붙여넣으세요", 5_000);
-            }} className="min-h-11 flex-1 rounded-xl bg-[#fee500] px-3 text-[11px] font-bold text-[#191919]">내용 선택</button>
-            <button type="button" onClick={() => setManualText("")} className="min-h-11 rounded-xl bg-white/10 px-3 text-[11px] font-semibold text-white/70">닫기</button>
+            }} className="min-h-11 flex-1 rounded-xl bg-yellow px-3 text-[11px] font-bold text-on-yellow">내용 선택</button>
+            <button type="button" onClick={() => setManualText("")} className="min-h-11 rounded-xl bg-fill px-3 text-[11px] font-semibold text-ink-secondary">닫기</button>
           </div>
         </div>
       )}
